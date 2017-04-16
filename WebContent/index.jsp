@@ -51,102 +51,85 @@
         <div class="col-xs-12">
           <h1 class="color-white">Look up your flights here</h1>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-12">
           <form class="form-horizontal" role="form" action="result.jsp" method="get">
 
-            <div class="form-group">
-              <div class="col-sm-3">
+            <div id="searching_board" class="form-group"><!--id中间不能出现空格。需要用下划线代替空格 -->
+              <div id="adjust1" class="col-sm-2">
                 <input class="form-control" type="text" name="customer_from" placeholder="From City or Airport"  autofocus>
               </div>
-              <div class="col-sm-3">
+              <div id="adjust2" class="col-sm-2">
                 <input class="form-control" type="text" name="customer_to" placeholder="To City or Airport" >
               </div>
-              <div class="col-sm-3">
-                <input class="form-control" type="date" name="customer_date" placeholder="Depart">
+              <div class="col-sm-2">
+                <input class="form-control" type="date" id="date1" name="customer_date" >
               </div>
-              <div class="col-sm-3">
+
+              <div id="adjust3" class="col-sm-2">
                 <button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button>
               </div>
             </div>
 
-
-            <div class="form-group">
-              <label class="col-sm-1 color-1">Trip Type</label>
-              <div class="col-sm-2">
-                <label class="color-1">
-                  <input type="radio" name="customer_triptype" id="one-way" value="One-Way" Checked>
-                  One-Way
-                </label>
-                <label class="color-1">
-                  <input type="radio" name="customer_triptype" id="roundtrip" value="Roundtrip">
-                  Roundtrip
-                </label>
-              </div>
-              <label class="col-sm-1 color-1">Cabin</label>
-              <div class="col-sm-2">
-                <label class="color-1">
-                  <input type="radio" name="customer_cabin" id="economy" value="Economy" checked>
-                  Economy
-                </label>
-                <label class="color-1">
-                  <input type="radio" name="customer_cabin" id="premium" value="Premium">
-                  Premium
-                </label>
+            <div class="col-sm-8">
+              <div class="form-group">
+                <label class="col-sm-1 color-1">Trip Type</label>
+                <div class="col-sm-2">
+                  <label class="color-1">
+                    <input type="radio" name="customer_triptype" id="one-way" value="One-Way" Checked>
+                    One-Way
+                  </label>
+                  <label class="color-1">
+                    <input type="radio" name="customer_triptype" id="roundtrip" value="Roundtrip">
+                    Roundtrip
+                  </label>
+                </div>
+                <label class="col-sm-1 color-1">Cabin</label>
+                <div class="col-sm-2">
+                  <label class="color-1">
+                    <input type="radio" name="customer_cabin" id="economy" value="Economy" checked>
+                    Economy
+                  </label>
+                  <label class="color-1">
+                    <input type="radio" name="customer_cabin" id="premium" value="Premium">
+                    Premium
+                  </label>
+                </div>
               </div>
             </div>
-
           </form>
-
         </div>
       </div>
-	</div>
-
-
-
-
-
-
-
-
-
-
-    <!--
-
-      <form class="form-signin">
-        <h2 class="form-signin-heading">Flight Reservation</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="From City or Airport" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="To City or Airport" required>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
-        </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      </form>
-
-    </div>  --><!-- /container -->
-
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
-    function getCurrentDate() {
-         var date = new Date();
-         var monthArray=new Array
-         ("January","February","March","April","May","June","July","August",
-         "September","October","November","December");
-         var weekArray = new Array("Sunday","Monday","Tuesday",
-              "Wednesday","Thursday","Friday","Saturday");
-         month=date.getMonth();
-         day=date.getDate();
-         if(day.toString().length == 1){
-             day="0"+day.toString();
-         }
-         document.write(monthArray[month]+" "+day+", "+
-             date.getFullYear() + "  " + weekArray[date.getDay()]);
-    }
-</script>
+    var flag = 0;
+    var txt = '<div class="col-sm-2"><input class="form-control" type="date" name="customer_date" id="date1"; required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>';  <!--若要插入一段html代码，需要用单引号。双引号会报错。 -->
+    var txt1 = '<div class="col-sm-2"><input class="form-control" type="date"id="date2"name="customer_date1" required></div><div class="col-sm-2"><input class="form-control" type="date"id="date3"name="customer_date2" required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>'
+      $(function() {
+          $("#one-way").click(function() {
+            if(flag == 1) {
+              $("#adjust3").remove();
+              $("#date2").remove();
+              $("#date3").remove();
+              $("#adjust2").after(txt);
+              flag = 0;
+            }
+          });
+      });
+
+      $(function() {
+          $("#roundtrip").click(function() {
+            if(flag == 0) {
+              $("#date1").remove();
+              $("#adjust3").remove();
+              $("#adjust2").after(txt1);
+              flag = 1;
+            }
+          });
+      });
+
+    </script>
   </body>
 </html>

@@ -38,6 +38,8 @@ public class Flight {
 	private Seating seating;
 	private int flightTime;
 	
+	private String deTimeString;
+	private String arTimeString;
 	
 	
 	
@@ -68,6 +70,15 @@ public class Flight {
 		this.arrivalTime = arrivalTime;
 		this.seating = seats;
 		this.flightTime = flightTime;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departure)));
+		String dTime = sdf.format(departureTime);
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrival)));
+		String aTime = sdf.format(arrivalTime);
+		
+		this.deTimeString = dTime;
+		this.arTimeString = aTime;
 	}
 	
 	
@@ -77,13 +88,13 @@ public class Flight {
 	 */
 	@Override
 	public String toString() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departure)));
-		String dTime = sdf.format(departureTime);
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrival)));
-		String aTime = sdf.format(arrivalTime);
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departure)));
+//		String dTime = sdf.format(departureTime);
+//		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrival)));
+//		String aTime = sdf.format(arrivalTime);
 		return "Flight [airplane=" + airplane + ", number=" + number + ", arrival=" + arrival + ", departure="
-				+ departure + ", arrivalTime=" + aTime + ", departureTime=" + dTime + ", seating="
+				+ departure + ", arrivalTime=" + arTimeString + ", departureTime=" + deTimeString + ", seating="
 				+ seating.toString() + ", flightTime=" + flightTime + "]";
 	}
 
@@ -111,6 +122,31 @@ public class Flight {
 	public int getFlightTime() {
 		return flightTime;
 	}
+	
+	public String getDeTimeString() {
+		return deTimeString;
+	}
+
+
+
+	public void setDeTimeString(String deTimeString) {
+		this.deTimeString = deTimeString;
+	}
+
+
+
+	public String getArTimeString() {
+		return arTimeString;
+	}
+
+
+
+	public void setArTimeString(String arTimeString) {
+		this.arTimeString = arTimeString;
+	}
+
+
+
 	/**
 	 * @param flightTime the flightTime to set
 	 */
