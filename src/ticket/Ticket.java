@@ -1,4 +1,4 @@
-package flight;
+package ticket;
 
 import java.util.Date;
 

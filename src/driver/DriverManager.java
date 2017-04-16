@@ -236,12 +236,14 @@ public class DriverManager {
 		departure = departure.equals("")|departure.equals(null)|departure.equals("null")|departure==null ? "BOS" : departure;
 		
 		
-		flightlis.addAll(driverManager.searchFlightsWithoutStop(arrival, date, departure));
+		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival ));
 
-		flightlis.addAll(driverManager.searchFlightsWithOneStop(arrival, date, departure));
+		flightlis.addAll(driverManager.searchFlightsWithOneStop(departure, date, arrival ));
 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(arrival, date, departure));
+		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival ));
 
+		
+		
 		JSONArray jsonArray = JSONArray.fromObject(flightlis);
 //		System.out.println(jsonArray);
 		return jsonArray;
