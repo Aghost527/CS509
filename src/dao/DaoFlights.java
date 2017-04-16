@@ -106,11 +106,13 @@ public class DaoFlights {
 			
 			String[] dTime=departureTime.split(" ");
 //			Time tDeTime=new Time(dTime[0],dTime[1],dTime[2],dTime[3],dTime[4]);
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH:mm ZZZ");
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departureCode)));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd HH:mm");
+			//sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departureCode)));
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT")); 
+			// DataBase return time as GMT so in this data we need GMT instead of offset. 
 			Date deDate = null;
 			try {
-				deDate = sdf.parse(dTime[0]+" "+monthMap.get(dTime[1])+" "+dTime[2]+" "+dTime[3]+" "+dTime[4]);
+				deDate = sdf.parse(dTime[0]+" "+monthMap.get(dTime[1])+" "+dTime[2]+" "+dTime[3]+":"+dTime[4]);
 //				deDate = sdf.parse(departureTime);
 				
 			} catch (ParseException e) {
@@ -130,7 +132,9 @@ public class DaoFlights {
 			String[] aTime=arrivalTime.split(" ");
 //			Time tArTime=new Time(aTime[0],aTime[1],aTime[2],aTime[3],aTime[4]);
 			
-			sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrivalCode)));
+			//sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrivalCode)));
+			sdf.setTimeZone(TimeZone.getTimeZone("GMT")); 
+			// DataBase return GMT so we only need GMT here instead of offset
 			
 			Date ArDate = null;
 			try {

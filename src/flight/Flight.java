@@ -1,6 +1,9 @@
 package flight;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import utils.Saps;
+import java.util.TimeZone;
 
 /**
  * This class holds values pertaining to a single Airport. Class member attributes
@@ -74,8 +77,13 @@ public class Flight {
 	 */
 	@Override
 	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(departure)));
+		String dTime = sdf.format(departureTime);
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT"+Saps.timeZoneMap.get(arrival)));
+		String aTime = sdf.format(arrivalTime);
 		return "Flight [airplane=" + airplane + ", number=" + number + ", arrival=" + arrival + ", departure="
-				+ departure + ", arrivalTime=" + arrivalTime.toString() + ", departureTime=" + departureTime.toString() + ", seating="
+				+ departure + ", arrivalTime=" + aTime + ", departureTime=" + dTime + ", seating="
 				+ seating.toString() + ", flightTime=" + flightTime + "]";
 	}
 
