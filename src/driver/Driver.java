@@ -64,13 +64,13 @@ public class Driver extends HttpServlet  {
 		     
 		System.out.println("finished");
 		
-		List<Flights> flightlis = driverManager.searchFlightsWithoutStop(departure, time, arrival );
+//		List<Flights> flightlis = driverManager.searchFlightsWithoutStop(departure, time, arrival );
 
 		
 //		List<Flights> flightlis = driverManager.searchFlightsWithOneStop(arrival, time, departure);
 
 		
-//		List<Flights> flightlis = driverManager.searchFlightsWithTwoStop(arrival, time, departure);
+		List<Flights> flightlis = driverManager.searchFlightsWithTwoStop(arrival, time, departure);
 
 		//output
 		for(Flights flight  :flightlis){

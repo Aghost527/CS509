@@ -52,7 +52,7 @@
           <h1 class="color-white">Look up your flights here</h1>
         </div>
         <div class="col-sm-8">
-          <form class="form-horizontal" role="form" action="result.jsp" method="post">
+          <form class="form-horizontal" role="form" action="result.jsp" method="get">
 
             <div class="form-group">
               <div class="col-sm-3">

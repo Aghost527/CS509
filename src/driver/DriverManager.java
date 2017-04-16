@@ -221,7 +221,12 @@ public class DriverManager {
 		return res + "</Flights>";
 
 	}
-
+	
+	public List<Flights> filterWithSeats(){
+		return null;
+		
+	}
+	
 	public JSONArray search(String tripType, String seatType, String departure,  String date,String arrival) {
 		List<Flights> flightlis = new ArrayList<Flights>();
 		DriverManager driverManager = new DriverManager();
@@ -238,7 +243,7 @@ public class DriverManager {
 		flightlis.addAll(driverManager.searchFlightsWithTwoStop(arrival, date, departure));
 
 		JSONArray jsonArray = JSONArray.fromObject(flightlis);
-		System.out.println(jsonArray);
+//		System.out.println(jsonArray);
 		return jsonArray;
 
 	}
