@@ -84,13 +84,13 @@ public class Tickets  {
 	/**
 	 * @return the totalFlightTime
 	 */
-	public int getTotalFlightTime() {
+	public String getTotalFlightTime() {
 		return totalFlightTime;
 	}
 	/**
 	 * @param totalFlightTime the totalFlightTime to set
 	 */
-	public void setTotalFlightTime(int totalFlightTime) {
+	public void setTotalFlightTime(String totalFlightTime) {
 		this.totalFlightTime = totalFlightTime;
 	}
 	/**
