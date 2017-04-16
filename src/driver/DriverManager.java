@@ -238,7 +238,7 @@ public class DriverManager {
 		flightlis.addAll(driverManager.searchFlightsWithTwoStop(arrival, date, departure));
 
 		JSONArray jsonArray = JSONArray.fromObject(flightlis);
-		System.out.println(jsonArray);
+		//System.out.println(jsonArray);
 		return jsonArray;
 
 	}

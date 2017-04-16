@@ -122,6 +122,31 @@ public class Flight {
 	public int getFlightTime() {
 		return flightTime;
 	}
+	
+	public String getDeTimeString() {
+		return deTimeString;
+	}
+
+
+
+	public void setDeTimeString(String deTimeString) {
+		this.deTimeString = deTimeString;
+	}
+
+
+
+	public String getArTimeString() {
+		return arTimeString;
+	}
+
+
+
+	public void setArTimeString(String arTimeString) {
+		this.arTimeString = arTimeString;
+	}
+
+
+
 	/**
 	 * @param flightTime the flightTime to set
 	 */
