@@ -10,6 +10,7 @@ public class Tickets  {
 	private List<Ticket> ticketList;
 	private Double totalPrice;
 	private String totalFlightTime;
+	private int totalFlightMinute;
 	private String SeatType;
 	private String deTimeString;
 	private String arTimeString;
@@ -48,6 +49,7 @@ public class Tickets  {
 			for(Flight f:flist){
 				String tprice=f.getSeating().getCoachPrice();
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
+				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "Coach", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 			}
 			
 		}
@@ -55,6 +57,7 @@ public class Tickets  {
 			for(Flight f:flist){
 				String tprice=f.getSeating().getFirstClassPrice();
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
+				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "First-Class", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));				
 			}
 		}
 		else{
@@ -62,7 +65,10 @@ public class Tickets  {
 		}
 		long diff = (flist.get(flist.size()-1).getArrivalTime().getTime() - flist.get(0).getDepartureTime().getTime()) / 60000;
 		
+		this.SeatType=seatType;
+		this.ticketList=t;
 		this.totalPrice = price;
+		this.totalFlightMinute=(int) diff;
 		this.totalFlightTime = (diff/60)+"h " +(diff%60)+"m";
 		this.setDeTimeString(flist.get(0).getDeTimeString());
 		this.setArTimeString(flist.get(flist.size()-1).getArTimeString());
@@ -146,6 +152,20 @@ public class Tickets  {
 	 */
 	public void setArTimeString(String arTimeString) {
 		this.arTimeString = arTimeString;
+	}
+
+	/**
+	 * @return the totalFlightMinute
+	 */
+	public int getTotalFlightMinute() {
+		return totalFlightMinute;
+	}
+
+	/**
+	 * @param totalFlightMinute the totalFlightMinute to set
+	 */
+	public void setTotalFlightMinute(int totalFlightMinute) {
+		this.totalFlightMinute = totalFlightMinute;
 	}
 	
 	

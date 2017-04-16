@@ -13,6 +13,8 @@ import dao.ServerInterface;
 import flight.Flight;
 import flight.Flights;
 import net.sf.json.JSONArray;
+import ticket.TicketController;
+import ticket.Tickets;
 import utils.Saps;
 
 public class DriverManager {
@@ -229,11 +231,13 @@ public class DriverManager {
 	
 	public JSONArray search(String tripType, String seatType, String departure,  String date,String arrival) {
 		List<Flights> flightlis = new ArrayList<Flights>();
+		List<Tickets> tlist=new ArrayList<Tickets>();
 		DriverManager driverManager = new DriverManager();
 		
 		arrival = arrival.equals("")|arrival.equals(null)|arrival.equals("null")|arrival==null ? "RDU" : arrival;
 		date = date.equals("")|date.equals(null)|date.equals("null")|date==null ? "2017_05_09" : date;
 		departure = departure.equals("")|departure.equals(null)|departure.equals("null")|departure==null ? "BOS" : departure;
+		seatType = seatType.equals("")|seatType.equals(null)|seatType.equals("null")|seatType==null ? "Coach" : seatType;
 		
 		
 		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival ));
@@ -242,9 +246,13 @@ public class DriverManager {
 
 		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival ));
 
+		for(Flights f:flightlis){
+			if(TicketController.validateFlights(f, seatType)){
+				tlist.add(new Tickets(f, seatType)); 
+			}
+		}
 		
-		
-		JSONArray jsonArray = JSONArray.fromObject(flightlis);
+		JSONArray jsonArray = JSONArray.fromObject(tlist);
 //		System.out.println(jsonArray);
 		return jsonArray;
 

@@ -220,44 +220,16 @@
       </div>
       </div>
     </div>
-
+<%
+        
+	      DriverManager driverManager=new DriverManager();
+		out.println(driverManager.search("", request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date"), request.getParameter("customer_to")));
+	      // out.println(driverManager.search("", "", "","",""));
+	  	%>
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-    <script language="javascript">
-    window.onload = createDiv();
-    var i = 1;
-    var test = "#detail" + i + "_tag";
-    $(document).ready(function(){
-      $(test).click(function(){
-        $("#detail1_content").toggle();
-      });
 
-    });
-
-    function createDiv() {
-    	var jsonStr=    	<%
-        
-	      DriverManager driverManager=new DriverManager();
-		out.println(driverManager.search("", "", request.getParameter("customer_from"),  request.getParameter("customer_date"), request.getParameter("customer_to")));
-	      // out.println(driverManager.search("", "", "","",""));
-	  	%>
-	  	
-  	alert(jsonStr[0][0].arrival)
-  	
-  	
-  	alert(jsonStr[0].length)
-  	
-      var num = jsonStr.length;<!--è¿ä¸ªæ°å­éè¿è¿åflightæ°ç»çé¿åº¦å³å®-->
-      var root = document.getElementById('root');
-      var i=0;
-      jsonStr.forEach(function(e){
-    	 i++;
-        root.innerHTML = root.innerHTML + ' <div class="row flight-div1" ><div class="col-sm-7 row-content border2 flight-div2"><div class="col-sm-9">'
-        +'<div class="col-sm-12"><div class="col-sm-4"><p>'+e[0].arrival +' 5:10p-SZX 1:30a</p></div><div class="col-sm-4"><p>20h 20m</p></div><div class="col-sm-4"><p>1</p></div></div><div class="col-sm-12"><div class="col-sm-4"><p>SZX 9:35p-BOS 3:10p</p></div><div class="col-sm-4"><p>29h 35m</p></div><div class="col-sm-4"><p>1</p></div></div></div><div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p><p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p><ul class="list-<li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li></ul></div><div id="detail1_content" class="col-sm-12 flight-div3"><div class="col-sm-3"><p>Flight 7962</p></div><div class="col-sm-3"><p>departs BOS 4:35p</p></div><div class="col-sm-3"><p>arrives PVG 7:15p</p> </div> <div class="col-sm-3"> <p>14h40m</p> </div> </div> </div> </div>'
-      })
-    }
-</script>
   </body>
 </html>
