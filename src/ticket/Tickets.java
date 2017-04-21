@@ -47,7 +47,7 @@ public class Tickets  {
 		List<Ticket> t=new ArrayList<Ticket>();
 		if(seatType.equals("Coach")){
 			for(Flight f:flist){
-				String tprice=f.getSeating().getCoachPrice();
+				String tprice=f.getSeating().getCoachPrice().replace(",", "");
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
 				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "Coach", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 			}
@@ -55,7 +55,7 @@ public class Tickets  {
 		}
 		else if(seatType.equals("First-Class")){
 			for(Flight f:flist){
-				String tprice=f.getSeating().getFirstClassPrice();
+				String tprice=f.getSeating().getFirstClassPrice().replace(",", "");
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
 				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "First-Class", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));				
 			}

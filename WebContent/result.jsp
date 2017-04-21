@@ -3,14 +3,13 @@
 <%@ page import="Demopackage.Democlass" %>0
 <%@ page import="driver.*" %>
 
-
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- ä¸è¿°3ä¸ªmetaæ ç­¾*å¿é¡»*æ¾å¨æåé¢ï¼ä»»ä½å¶ä»åå®¹é½*å¿é¡»*è·éå¶åï¼ -->
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <meta name="description" content="">
     <meta name="author" content="">
     <meta http-equiv="content-language" content="en-US" />
@@ -23,11 +22,9 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -75,7 +72,7 @@
     .row-content {
         margin:0px auto;
         padding: 50px 0px 50px 0px;
-        border-top: 1px ridge #999900;
+        border-top: 2px ridge #999900;
         min-height:120px;
     }
     .flight-div1 {
@@ -94,9 +91,6 @@
     .border1 {
       border: 1px ridge blue
     }
-    .border2 {
-      border-top: 1px ridge #999900;
-    }
     .div1{
       position:fixed;
       margin: 10px 0 0 20px;
@@ -107,15 +101,23 @@
     }
     .div3{
       position:fixed;
-      margin: 86px 0px 0 89px;
+      margin: 96px 0px 0 89px;
     }
     .div4{
       position:fixed;
-      margin: 86px 0 0 272px;
+      margin: 96px 0 0 272px;
     }
     .div5{
       position:fixed;
-      margin: 86px 0 0 440px;
+      margin: 96px 0 0 440px;
+    }
+    .padding-div {
+      position: fixed;
+      margin: 0px 0 0 0px;
+      border-top: 2px ridge #000;
+    }
+    .padding-p {
+      margin-top:7px;
     }
   </style>
 
@@ -154,8 +156,8 @@
       <div class="border" style="min-height: 100px">
         <p style="padding:6px min-height: 0px"></p>
       </div>
-      <div class="root-content border" id="root" style="height:1400px;width:1218px;overflow:auto;overflow-x:hidden;margin-top:0px;">
-        <div class="col-sm-7" style="border-top:2px ridge #000" >
+      <div class="root-content border" id="root" style="height:400px;width:1218px;overflow:auto;overflow-x:hidden;margin-top:0px;">
+        <div class="col-sm-7 padding-div" >
 
         </div>
 
@@ -163,9 +165,9 @@
         <!--add here -->
 
         <div class="row flight-div1" >
-          <div class="col-sm-7 row-content border2 flight-div2">
+          <div class="col-sm-7 row-content flight-div2">
 
-            <div class="col-sm-9">
+            <div class="col-sm-9 padding-p">
               <div class="col-sm-12">
                 <div class="col-sm-4">
                   <p>BOS 5:10p-SZX 1:30a</p>
@@ -192,14 +194,14 @@
               </div>
             </div>
             <div class="col-sm-3">
-                <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p>
+                <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p><!--jsonStr[i].totalPrice-->
                 <p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p>
                 <ul class="list-unstyled">
                   <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>
                 </ul>
             </div>
 
-            <div id="detail1_content" class="col-sm-12 flight-div3">
+            <div id="detail1_content" style="display:none" class="col-sm-12 flight-div3">
               <div class="col-sm-3">
                 <p>Flight 7962</p>
               </div>
@@ -213,23 +215,134 @@
                 <p>14h40m</p>
               </div>
             </div>
-
-
         </div>
-
       </div>
+
+      <div class="row ">
+        <div class="col-sm-7" style="border-bottom:2px ridge #999900">
+          <p style="padding:8px"></p>
+        </div>
+      </div>
+
+      <div class="row flight-div1 " >
+        <div class="col-sm-7 row-content flight-div2 ">
+
+          <div class="col-sm-9 padding-p">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <p>BOS 5:10p-SZX 1:30a</p>
+              </div>
+              <div class="col-sm-4">
+                <p>20h 20m</p>
+              </div>
+              <div class="col-sm-4">
+                <p>1</p>
+              </div>
+            </div>
+
+
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <p>SZX 9:35p-BOS 3:10p</p>
+              </div>
+              <div class="col-sm-4">
+                <p>29h 35m</p>
+              </div>
+              <div class="col-sm-4">
+                <p>1</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+              <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p>
+              <p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p>
+              <ul class="list-unstyled">
+                <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>
+              </ul>
+          </div>
+
+          <div id="detail1_content" style="display:none" class="col-sm-12 flight-div3">
+            <div class="col-sm-3">
+              <p>Flight 7962</p>
+            </div>
+            <div class="col-sm-3">
+              <p>departs BOS 4:35p</p>
+            </div>
+            <div class="col-sm-3">
+              <p>arrives PVG 7:15p</p>
+            </div>
+            <div class="col-sm-3">
+              <p>14h40m</p>
+            </div>
+          </div>
       </div>
     </div>
-<%
-        
-	      DriverManager driverManager=new DriverManager();
-		out.println(driverManager.search("", request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date"), request.getParameter("customer_to")));
-	      // out.println(driverManager.search("", "", "","",""));
-	  	%>
+
+
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--jsonStr[i].departure + ' ' + jsonStr[i].deTimeString.split(" ")[1] +  ' - ' + jsonStr[i].arrival + ' ' + jsonStr[i].arTimeString.split(" ")[1] -->
 
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script language="javascript">
+    window.onload = createDiv();
+    var i = 1;
+    var test = "#detail" + i + "_tag";
+    $(document).ready(function(){
+      $(test).click(function(){
+        $("#detail1_content").toggle();
+      });
 
+    });
+
+    function createDiv() {
+      var jsonStr=    	<%
+        DriverManager driverManager=new DriverManager();
+        String str  = request.getParameter("customer_date").replace('-', '_');
+
+    out.println(driverManager.search("", "", request.getParameter("customer_from"),  str, request.getParameter("customer_to")));
+
+      %>
+        var num = jsonStr.length;<!--è¿ä¸ªæ°å­éè¿è¿åflightæ°ç»çé¿åº¦å³å®-->
+        var root = document.getElementById('root');
+
+        for (var i = 0; i < jsonStr.length; i++) {
+          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
+          '<p>' + jsonStr[i].ticketList[0].departure + ' ' + jsonStr[i].deTimeString.split(" ")[1] +  ' - <br>' + jsonStr[i].ticketList[jsonStr[i].ticketList.length-1].arrival + ' ' + jsonStr[i].arTimeString.split(" ")[1] + '</p>' + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p><ul class="list-unstyled">  <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '</div></div>'
+        }
+    }
+</script>
   </body>
 </html>
