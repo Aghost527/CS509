@@ -219,12 +219,34 @@ public class DriverManager {
 
 	public boolean buyTicket(Flights flist, String seatType, String teamName) {
 		ServerInterface resSys = new ServerInterface();
-
-		resSys.lock(teamName);
 		String xmlFlights = flights2xml(flist, seatType);
-		boolean buySuccess = resSys.buyTickets(teamName, xmlFlights);
+		boolean isLocked;
+		boolean buySuccess;
+		
+		do{
+			isLocked = resSys.lock(teamName); // is locked DB
+		}while(!isLocked); // if DB is locked by teamName, then go to reserve tickets.
+		
+		buySuccess = resSys.buyTickets(teamName, xmlFlights);
 		resSys.unlock(teamName);
 		return buySuccess;
+		
+	}
+	
+	public boolean buyTicket(Tickets tlist, String teamName) {
+		ServerInterface resSys = new ServerInterface();
+		String xmlFlights = tickets2xml(tlist);
+		boolean isLocked;
+		boolean buySuccess;
+		
+		do{
+			isLocked = resSys.lock(teamName); // is locked DB
+		}while(!isLocked);
+		
+		buySuccess = resSys.buyTickets(teamName, xmlFlights);
+		resSys.unlock(teamName);
+		return buySuccess;
+		
 	}
 
 	/**
