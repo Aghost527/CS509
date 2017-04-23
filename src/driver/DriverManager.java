@@ -13,6 +13,7 @@ import dao.ServerInterface;
 import flight.Flight;
 import flight.Flights;
 import net.sf.json.JSONArray;
+import ticket.RoundTickets;
 import ticket.TicketController;
 import ticket.Tickets;
 import utils.Saps;
@@ -51,7 +52,7 @@ public class DriverManager {
 		// System.out.println(flights.size() + "drivermanager");
 
 		for (Flight f : flights) {
-			
+
 			if (isByDeparture && (f.getDepartureTime().before(d0) || f.getDepartureTime().after(d1))) {
 				continue;
 			}
@@ -77,21 +78,18 @@ public class DriverManager {
 		time = time.equals("") ? "2017_05_10" : time;
 		departure = departure.equals("") ? "BOS" : departure;
 
-
-//		if(isByDeparture){
+		// if(isByDeparture){
 		Flights flights1 = resSys.getFlightsFor3Days("TeamE", departure, time, true);// true
 																						// means
 																						// search
 																						// by
 																						// departure
 
-
-	
 		Flights flights2 = resSys.getFlightsFor2Days("TeamE", arrival, time, false);
-//		flights2.sortByArrivalAirport();
+		// flights2.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture?departure:arrival)));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture ? departure : arrival)));
 
 		Date d0 = null, d1 = null;
 		try {
@@ -107,8 +105,6 @@ public class DriverManager {
 				continue;
 			}
 
-			
-			
 			for (Flight f2 : flights2) {
 				// System.out.println(f2.getDeparture());
 				if ((!isByDeparture) && (f2.getArrivalTime().before(d0) || f2.getArrivalTime().after(d1))) {
@@ -158,7 +154,7 @@ public class DriverManager {
 		flights3.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture?departure:arrival)));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture ? departure : arrival)));
 
 		Date d0 = null, d1 = null;
 		try {
@@ -244,39 +240,68 @@ public class DriverManager {
 
 	}
 
-	public List<Flights> filterWithSeats() {
-		return null;
-
-	}
-
 	public JSONArray search(String tripType, String seatType, String departure, String date, String arrival,
-			String timeType) {
+			String timeType, String returndate,String returntimeType) {
 		List<Flights> flightlis = new ArrayList<Flights>();
 		List<Tickets> tlist = new ArrayList<Tickets>();
+		JSONArray jsonArray = null;
 		DriverManager driverManager = new DriverManager();
-		boolean isByDeparture= timeType.equals("Departure")?true:false;
+		boolean isByDeparture = timeType.equals("Departure") ? true : false;
+		boolean isByDeparture2 = returntimeType.equals("Departure") ? true : false;
 		arrival = arrival.equals("") | arrival.equals(null) | arrival.equals("null") | arrival == null ? "RDU"
 				: arrival;
 		date = date.equals("") | date.equals(null) | date.equals("null") | date == null ? "2017_05_10" : date;
+		returndate = returndate.equals("") | returndate.equals(null) | returndate.equals("null") | returndate == null
+				? "2017_05_11" : returndate;
 		departure = departure.equals("") | departure.equals(null) | departure.equals("null") | departure == null ? "BOS"
 				: departure;
 		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Coach"
 				: seatType;
-
+		
+		//generate outbound trips
 		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival, isByDeparture));
 
 		flightlis.addAll(driverManager.searchFlightsWithOneStop(departure, date, arrival, isByDeparture));
 
 		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival, isByDeparture));
-
+		
 		for (Flights f : flightlis) {
 			if (TicketController.validateFlights(f, seatType)) {
 				tlist.add(new Tickets(f, seatType));
 			}
 		}
+		
+		jsonArray=JSONArray.fromObject(tlist);
+		
+		//generate return trips
+		if(tripType.equals("RoundTrip")|tripType.equals("Roundtrip")|tripType.equals("Round_Trip")|tripType.equals("roundtrip")){
+			List<RoundTickets> rlist = new ArrayList<RoundTickets>();
+			List<Flights> flightlis2 = new ArrayList<Flights>();
+			
+			flightlis2.addAll(driverManager.searchFlightsWithoutStop(arrival, returndate, departure, isByDeparture2));
 
-		JSONArray jsonArray = JSONArray.fromObject(tlist);
-		// System.out.println(jsonArray);
+			flightlis2.addAll(driverManager.searchFlightsWithOneStop(arrival, returndate, departure, isByDeparture2));
+
+			flightlis2.addAll(driverManager.searchFlightsWithTwoStop(arrival, returndate, departure, isByDeparture2));
+			
+			for (Flights f1 : flightlis) {
+				if (!TicketController.validateFlights(f1, seatType)){
+					continue;
+				}
+				for (Flights f2 : flightlis) {
+					if (!TicketController.validateFlights(f2, seatType)){
+						continue;
+					}
+					if(f1.get(f1.size()-1).getArrivalTime().before(f2.get(0).getDepartureTime())){
+						rlist.add(new RoundTickets(new Tickets(f1,seatType),new Tickets(f2,seatType)));
+					}
+				}
+			}
+			jsonArray=JSONArray.fromObject(tlist);
+		}
+
+		
+		 System.out.println(jsonArray);
 		return jsonArray;
 
 	}

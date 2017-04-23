@@ -5,6 +5,7 @@ package driver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import airplane.Airplane;
 import airport.Airport;
 import airport.Airports;
 import dao.ServerInterface;
@@ -40,7 +42,7 @@ public class Driver extends HttpServlet  {
 //			return;
 //		}
 		
-			// Try to get a list of airports
+//			// Try to get a list of airports
 //		ServerInterface resSys=new ServerInterface();
 //		Airports airports = resSys.getAirports(teamName);
 //		for (Airport airport : airports) {
@@ -48,8 +50,13 @@ public class Driver extends HttpServlet  {
 //			System.out.println("put(\""+airport.code()+"\","+(int)airport.longitude()/15+");");
 //		}
 
-		// Try to get a list of airports
-//		while(true){
+		// Try to get a list of airplanes
+	ServerInterface resSys=new ServerInterface();
+	Map<String, Airplane> airplanes = resSys.getAirplanes(teamName);
+	for (String model : airplanes.keySet()) {
+//		System.out.println(airport.toString());
+		System.out.println(airplanes.get(model).toString());
+	}
 		
 
 		
@@ -64,7 +71,7 @@ public class Driver extends HttpServlet  {
 		     
 		System.out.println("finished");
 		
-		List<Flights> flightlis=new ArrayList<Flights>();
+//		List<Flights> flightlis=new ArrayList<Flights>();
 //		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, time, arrival, false ));
 
 		
@@ -73,20 +80,20 @@ public class Driver extends HttpServlet  {
 
 		
 //		List<Flights> 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, time, arrival, false));
+//		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, time, arrival, false));
 
 		//output
-		for(Flights flight  :flightlis){
-		System.out.println(flight.toString());
-//		System.out.println(driverManager.flights2xml(flight, "coach"));
-	}
-		
-
-        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
-//        System.out.println( jsonArray );  
-        
-		System.out.println("finished");
-		System.out.println("result size:"+flightlis.size());
+//		for(Flights flight  :flightlis){
+//		System.out.println(flight.toString());
+////		System.out.println(driverManager.flights2xml(flight, "coach"));
+//	}
+//		
+//
+//        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
+////        System.out.println( jsonArray );  
+//        
+//		System.out.println("finished");
+//		System.out.println("result size:"+flightlis.size());
 		
 		
 	}

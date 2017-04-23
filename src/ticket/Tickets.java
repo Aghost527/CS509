@@ -73,6 +73,9 @@ public class Tickets  {
 		this.setDeTimeString(flist.get(0).getDeTimeString());
 		this.setArTimeString(flist.get(flist.size()-1).getArTimeString());
 	}
+	
+	
+
 
 	
 	/**
