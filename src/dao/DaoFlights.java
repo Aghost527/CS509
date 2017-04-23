@@ -22,6 +22,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import airplane.Airplane;
 import flight.Flight;
 import flight.Flights;
 import flight.Seating;
@@ -50,7 +51,7 @@ public class DaoFlights {
 		put("Nov","11");
 		put("Dec","12");	}};  
 	
-	public static Flights addAll (String xmlFlights) throws NullPointerException {
+	public static Flights addAll (Map<String,Airplane> airplanes,String xmlFlights) throws NullPointerException {
 		Flights flights = new Flights();
 		
 		// Load the XML string into a DOM tree for ease of processing
@@ -60,7 +61,7 @@ public class DaoFlights {
 //		System.out.println("len"+nodesFlights.getLength());
 		for (int i = 0; i < nodesFlights.getLength(); i++) {
 			Element elementFlight = (Element) nodesFlights.item(i);
-			Flight flight = buildFlight(elementFlight);
+			Flight flight = buildFlight(airplanes,elementFlight);
 			
 			flights.add(flight);
 //			if (flight.isValid()) {
@@ -71,7 +72,7 @@ public class DaoFlights {
 		return flights;
 	}
 		
-	static private Flight buildFlight(Node nodeFlight) {
+	static private Flight buildFlight(Map<String,Airplane> airplanes,Node nodeFlight) {
 			/**
 			 * Instantiate an empty Flight object
 			 */
@@ -147,16 +148,22 @@ public class DaoFlights {
 				e.printStackTrace();
 			}
 			
+			
+			int firstTotal = airplanes.get(Airplane).getFirstClassSeats();
+			int coachTotal = airplanes.get(Airplane).getCoachSeats();
+			
 			Element flightSeating;
 			flightSeating = (Element)elementFlight.getElementsByTagName("Seating").item(0);
 			Element coachSeating = (Element)flightSeating.getElementsByTagName("Coach").item(0);
 			String coachPrice = coachSeating.getAttributeNode("Price").getValue();
-			int coachRemaining = Integer.parseInt(getCharacterDataFromElement(coachSeating));
+			int coachRemaining = coachTotal - Integer.parseInt(getCharacterDataFromElement(coachSeating));
 				
 			Element firstclassSeating = (Element)flightSeating.getElementsByTagName("FirstClass").item(0);
 			String firstclassPrice = firstclassSeating.getAttributeNode("Price").getValue();
-			int firstRemaining = Integer.parseInt(getCharacterDataFromElement(firstclassSeating));
-
+			int firstRemaining = firstTotal - Integer.parseInt(getCharacterDataFromElement(firstclassSeating));
+			
+			 
+			
 			Seating seats=new Seating(firstclassPrice, coachPrice, firstRemaining, coachRemaining);
 			
 			/**

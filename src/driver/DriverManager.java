@@ -23,7 +23,7 @@ import utils.Saps;
 
 public class DriverManager {
 
-	public List<Flights> searchFlightsWithoutStop(String departure, String time, String arrival,
+	public List<Flights> searchFlightsWithoutStop(Map<String, Airplane> airplanes, String departure, String time, String arrival,
 			boolean isByDeparture) {
 		List<Flights> flist = new ArrayList<Flights>();
 		arrival = arrival.equals("") ? "RDU" : arrival;
@@ -44,7 +44,7 @@ public class DriverManager {
 		ServerInterface resSys = new ServerInterface();
 		// Flights flights = resSys.getFlighs("TeamE","BOS","2017_05_10",true);
 		Flights flights = new Flights();
-		flights = resSys.getFlightsFor2Days("TeamE", isByDeparture ? departure : arrival, time, isByDeparture);
+		flights = resSys.getFlightsFor2Days(airplanes,"TeamE", isByDeparture ? departure : arrival, time, isByDeparture);
 		if (isByDeparture) {
 
 			flights = flights.filterByArrival(arrival, flights);
@@ -73,7 +73,7 @@ public class DriverManager {
 	/*
 	 * for the time being, it can only search flight within one day
 	 */
-	public List<Flights> searchFlightsWithOneStop(String departure, String time, String arrival,
+	public List<Flights> searchFlightsWithOneStop(Map<String,Airplane> airplanes,String departure, String time, String arrival,
 			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
 		List<Flights> res = new ArrayList<Flights>();
@@ -82,13 +82,13 @@ public class DriverManager {
 		departure = departure.equals("") ? "BOS" : departure;
 
 		// if(isByDeparture){
-		Flights flights1 = resSys.getFlightsFor3Days("TeamE", departure, time, true);// true
+		Flights flights1 = resSys.getFlightsFor3Days( airplanes,"TeamE", departure, time, true);// true
 																						// means
 																						// search
 																						// by
 																						// departure
 
-		Flights flights2 = resSys.getFlightsFor2Days("TeamE", arrival, time, false);
+		Flights flights2 = resSys.getFlightsFor2Days(airplanes,"TeamE", arrival, time, false);
 		// flights2.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
@@ -133,7 +133,7 @@ public class DriverManager {
 
 	}
 
-	public List<Flights> searchFlightsWithTwoStop(String departure, String time, String arrival,
+	public List<Flights> searchFlightsWithTwoStop(Map<String,Airplane> airplanes,String departure, String time, String arrival,
 			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
 		List<Flights> res = new ArrayList<Flights>();
@@ -144,7 +144,7 @@ public class DriverManager {
 
 		// Flights flights1 =
 		// resSys.getFlightsFor2Days("TeamE","PHL","2017_05_10",true);
-		Flights flights1 = resSys.getFlightsFor3Days("TeamE", departure, time, true);// true
+		Flights flights1 = resSys.getFlightsFor3Days( airplanes,"TeamE", departure, time, true);// true
 																						// means
 																						// search
 																						// by
@@ -153,7 +153,7 @@ public class DriverManager {
 
 		// Flights flights3 =
 		// resSys.getFlightsFor2Days("TeamE","RDU","2017_05_10",false);
-		Flights flights3 = resSys.getFlightsFor2Days("TeamE", arrival, time, false);
+		Flights flights3 = resSys.getFlightsFor2Days( airplanes,"TeamE", arrival, time, false);
 		flights3.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
@@ -174,7 +174,7 @@ public class DriverManager {
 			}
 
 			if (!map.containsKey(f1.getArrival())) {
-				map.put(f1.getArrival(), resSys.getFlightsFor2Days("TeamE", f1.getArrival(), time, true));
+				map.put(f1.getArrival(), resSys.getFlightsFor2Days( airplanes,"TeamE", f1.getArrival(), time, true));
 			}
 			// System.out.println(map.get(f1.getArrival()).size()+"len");
 			for (Flight f2 : map.get(f1.getArrival())) {
@@ -274,11 +274,11 @@ public class DriverManager {
 		Map<String, Airplane> airplanes = new ServerInterface().getAirplanes("TeamE");
 		
 		//generate outbound trips
-		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival, isByDeparture));
+		flightlis.addAll(driverManager.searchFlightsWithoutStop(airplanes,departure, date, arrival, isByDeparture));
 
-		flightlis.addAll(driverManager.searchFlightsWithOneStop(departure, date, arrival, isByDeparture));
+		flightlis.addAll(driverManager.searchFlightsWithOneStop(airplanes,departure, date, arrival, isByDeparture));
 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival, isByDeparture));
+		flightlis.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
 		
 		
 
@@ -288,11 +288,11 @@ public class DriverManager {
 			List<RoundTickets> rlist = new ArrayList<RoundTickets>();
 			List<Flights> flightlis2 = new ArrayList<Flights>();
 			
-			flightlis2.addAll(driverManager.searchFlightsWithoutStop(arrival, returndate, departure, isByDeparture2));
+			flightlis2.addAll(driverManager.searchFlightsWithoutStop(airplanes,arrival, returndate, departure, isByDeparture2));
 
-			flightlis2.addAll(driverManager.searchFlightsWithOneStop(arrival, returndate, departure, isByDeparture2));
+			flightlis2.addAll(driverManager.searchFlightsWithOneStop(airplanes,arrival, returndate, departure, isByDeparture2));
 
-			flightlis2.addAll(driverManager.searchFlightsWithTwoStop(arrival, returndate, departure, isByDeparture2));
+			flightlis2.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
 			
 			for (Flights f1 : flightlis) {
 				if (!TicketController.validateFlights(f1, seatType)){

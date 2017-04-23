@@ -72,15 +72,17 @@ public class Driver extends HttpServlet  {
 		System.out.println("finished");
 		
 		List<Flights> flightlis=new ArrayList<Flights>();
-		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, time, arrival, false ));
+		
+		
+		flightlis.addAll(driverManager.searchFlightsWithoutStop(airplanes,departure, time, arrival, false ));
 
 		
 //		List<Flights> 
-//		flightlis.addAll( driverManager.searchFlightsWithOneStop(departure, time,arrival, false ));
+//		flightlis.addAll( driverManager.searchFlightsWithOneStop(airplanes,departure, time,arrival, false ));
 
 		
 //		List<Flights> 
-//		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, time, arrival, false));
+//		flightlis.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, time, arrival, false));
 
 		//output
 //		for(Flights flight  :flightlis){

@@ -151,7 +151,7 @@ public class ServerInterface {
 		
 	}
 	
-	public Flights getFlightsFor2Days(String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
+	public Flights getFlightsFor2Days(Map<String, Airplane> airplanes, String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
 		//add 1 day and search tomorrow's flights
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
 		Date deDate=null;
@@ -164,14 +164,14 @@ public class ServerInterface {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(deDate);
 		cal.add(Calendar.DATE, 1);
-		Flights flights=this.getFlights(teamName, airportCode, Date, isByDeparture);//first and second day
-		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
+		Flights flights=this.getFlights( airplanes,teamName, airportCode, Date, isByDeparture);//first and second day
+		flights.addAll(this.getFlights( airplanes,teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
 	
 		return flights;
 		
 	}
 	
-	public Flights getFlightsFor3Days(String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
+	public Flights getFlightsFor3Days(Map<String,Airplane> airplanes,String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
 		//add 1 day and search tomorrow's flights
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
 		Date deDate=null;
@@ -185,11 +185,11 @@ public class ServerInterface {
 		cal.setTime(deDate);
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
 		
-		Flights flights=this.getFlights(teamName, airportCode, Date, isByDeparture);//first and second day
-		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
+		Flights flights=this.getFlights(airplanes, teamName, airportCode, Date, isByDeparture);//first and second day
+		flights.addAll(this.getFlights(airplanes,teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
 		
 		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 2);
-		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
+		flights.addAll(this.getFlights(airplanes,teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
 		
 		return flights;
 		
@@ -200,7 +200,7 @@ public class ServerInterface {
 	 * @throws ParseException 
 	 * @throws NullPointerException 
 	 */
-	public Flights getFlights (String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
+	public Flights getFlights (Map<String,Airplane> airplanes,String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
 
 		URL url;
 		HttpURLConnection connection;
@@ -245,7 +245,7 @@ public class ServerInterface {
 
 		xmlFlights = result.toString();
 		System.out.println("xmlFlights"+xmlFlights);
-		flights = DaoFlights.addAll(xmlFlights);
+		flights = DaoFlights.addAll(airplanes,xmlFlights);
 		
 		return flights;
 		
