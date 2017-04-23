@@ -222,8 +222,9 @@ public class DriverManager {
 
 		resSys.lock(teamName);
 		String xmlFlights = flights2xml(flist, seatType);
-		resSys.buyTickets(teamName, xmlFlights);
-		return resSys.unlock(teamName);
+		boolean buySuccess = resSys.buyTickets(teamName, xmlFlights);
+		resSys.unlock(teamName);
+		return buySuccess;
 	}
 
 	/**
