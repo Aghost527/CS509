@@ -52,21 +52,25 @@
           <h1 class="color-white">Look up your flights here</h1>
         </div>
         <div class="col-sm-12">
-          <form class="form-horizontal" role="form" action="result.jsp" method="get">
+          <!-- <form class="form-horizontal" role="form" action="result.jsp" method="get"> -->
 
             <div id="searching_board" class="form-group"><!--id中间不能出现空格。需要用下划线代替空格 -->
               <div id="adjust1" class="col-sm-2">
-                <input class="form-control" type="text" name="customer_from" placeholder="From City or Airport"  autofocus>
+                <input class="form-control" type="text" id="customer_from" name="customer_from" placeholder="From City or Airport" >
               </div>
               <div id="adjust2" class="col-sm-2">
-                <input class="form-control" type="text" name="customer_to" placeholder="To City or Airport" >
+                <input class="form-control" type="text" id="customer_to"  name="customer_to" placeholder="To City or Airport"  >
               </div>
               <div class="col-sm-2">
-                <input class="form-control" type="date" id="date1" name="customer_date" >
+                <input class="form-control" type="date" id="customer_date" name="customer_date" id="date1"; required>
+              </div>
+
+              <div class="col-sm-2" id="returndiv">
+                <input class="form-control" type="date" id="customer_returndate" name="customer_returndate" style="display:none"></input>
               </div>
 
               <div id="adjust3" class="col-sm-2">
-                <button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button>
+                <button type="submit" class="btn btn-md btn-primary btn-block" id="customer_search" name="customer_search">Search</button>
               </div>
             </div>
 
@@ -104,52 +108,59 @@
                     <input type="radio" name="customer_timetype" id="Arrival" value="Arrival">
                     Arrival
                   </label>
-                </div>
+                  
+              </div>
+              <label  id="returntimetypelabel" class="col-sm-1 color-1" style="display:none">Time Type</label>
+                <div class="col-sm-2" id="returntimetypediv" style="display:none">
+                  <label class="color-1">
+                    <input type="radio" name="customer_returntimetype" id="Departure_return" value="Departure" checked>
+                    Departure
+                  </label>
+                <label class="color-1">
+                <input type="radio" name="customer_returntimetype" id="Arrival_return" value="Arrival">
+                Arrival</label>
+               </div>
+
               </div>
             </div>
-          </form>
+          <!-- </form> -->
         </div>
       </div>
     </div>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
-    var flag = 0;
-
-    var txt = '<div class="col-sm-2"><input class="form-control" type="date" name="customer_date" id="date1"; required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>';  <!--若要插入一段html代码，需要用单引号。双引号会报错。 -->
-
-    var txt1 = '<div class="col-sm-2"><input class="form-control" type="date"id="date2"name="customer_date" required></div><div class="col-sm-2"><input class="form-control" type="date"id="date3"name="customer_returndate" required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>'
-
-    var txt2 = '<label id="adjust6" class="col-sm-1 color-1">Time Type</label><div class="col-sm-2" id="adjust5"><label class="color-1"><input type="radio" name="customer_returntimetype" id="Departure_return" value="Departure" checked>Departure</label><label class="color-1"><input type="radio" name="customer_returntimetype" id="Arrival_return" value="Arrival">Arrival</label></div>'
-
+    
       $(function() {
           $("#one-way").click(function() {
-            if(flag == 1) {
-              $("#adjust3").remove();
-              $("#date2").remove();
-              $("#date3").remove();
-              $("#adjust2").after(txt);
-
-              $("#adjust5").remove();
-              $("#adjust6").remove();
-              flag = 0;
-            }
+            document.getElementById("returntimetypediv").style.display="none"
+            document.getElementById("returntimetypelabel").style.display="none"
+            document.getElementById("returninput").style.display="none"
           });
       });
 
       $(function() {
           $("#roundtrip").click(function() {
-            if(flag == 0) {
-              $("#date1").remove();
-              $("#adjust3").remove();
-              $("#adjust2").after(txt1);
+             $("#returntimetypediv").show();
+             $("#returntimetypelabel").show();
+             $("#returninput").show();
+          });
+      });
 
-              $("#adjust4").after(txt2);
 
-              flag = 1;
-            }
+      $(function() {
+          $("#customer_search").click(function() {
+            window.location='result.jsp?customer_from='+document.getElementsByName("customer_from")[0].value+
+             '&customer_to='+document.getElementsByName("customer_to")[0].value+
+             '&customer_date='+document.getElementsByName("customer_date")[0].value+
+             '&customer_returndate='+document.getElementsByName("customer_returndate")[0].value+
+             '&customer_search='+document.getElementsByName("customer_search")[0].value+
+             '&customer_triptype='+document.getElementsByName("customer_triptype")[0].value+
+             '&customer_cabin='+document.getElementsByName("customer_cabin")[0].value+
+             '&customer_timetype='+document.getElementsByName("customer_timetype")[0].value+
+             '&customer_returntimetype='+document.getElementsByName("customer_returntimetype")[0].value;
           });
       });
 
