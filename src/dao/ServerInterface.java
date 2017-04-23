@@ -14,7 +14,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
+import airplane.Airplane;
 import airport.Airports;
 import flight.Flights;
 import utils.QueryFactory;
@@ -99,6 +101,55 @@ public class ServerInterface {
 		
 	}
 	
+	public Map<String,Airplane> getAirplanes (String teamName) {
+
+		URL url;
+		HttpURLConnection connection;
+		BufferedReader reader;
+		String line;
+		StringBuffer result = new StringBuffer();
+		
+		String xmlAirplanes;
+		Map<String,Airplane> airplanes;
+
+		try {
+			/**
+			 * Create an HTTP connection to the server for a GET 
+			 */
+			url = new URL(mUrlBase + QueryFactory.getAirplanes(teamName));
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", teamName);
+
+			/**
+			 * If response code of SUCCESS read the XML string returned
+			 * line by line to build the full return string
+			 */
+			int responseCode = connection.getResponseCode();
+			if (responseCode >= HttpURLConnection.HTTP_OK) {
+				InputStream inputStream = connection.getInputStream();
+				String encoding = connection.getContentEncoding();
+				encoding = (encoding == null ? "UTF-8" : encoding);
+
+				reader = new BufferedReader(new InputStreamReader(inputStream));
+				while ((line = reader.readLine()) != null) {
+					result.append(line);
+				}
+				reader.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		xmlAirplanes = result.toString();
+		System.out.println("xmlAirplanes"+xmlAirplanes);
+		airplanes = DaoAirplane.addAll(xmlAirplanes);
+		//daoflights
+		return airplanes;
+		
+	}
 	
 	public Flights getFlightsFor2Days(String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
 		//add 1 day and search tomorrow's flights

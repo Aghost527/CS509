@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="Demopackage.Democlass" %>
 <%@ page import="driver.*" %>
 
 <!DOCTYPE html>
@@ -341,7 +340,7 @@
     var jsonStr=      <%
       DriverManager driverManager=new DriverManager();
       String str  = request.getParameter("customer_date").replace('-', '_');
-  out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  str, request.getParameter("customer_to"), request.getParameter("customer_timetype")));
+  out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  str, request.getParameter("customer_to"), request.getParameter("customer_timetype"),"",""));
     %>
 
 
