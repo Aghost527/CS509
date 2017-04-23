@@ -317,11 +317,12 @@ public class DriverManager {
 
 			flightlis2.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
 			
+			//return should be later than outbound
 			for (Flights f1 : flightlis) {
 				if (!TicketController.validateFlights(f1, seatType)){
 					continue;
 				}
-				for (Flights f2 : flightlis) {
+				for (Flights f2 : flightlis2) {
 					if (!TicketController.validateFlights(f2, seatType)){
 						continue;
 					}
