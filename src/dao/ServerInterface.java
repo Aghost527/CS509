@@ -29,6 +29,10 @@ import utils.QueryFactory;
  * @since 2016-02-24
  *
  */
+/**
+ * @author blinw
+ *
+ */
 public class ServerInterface {
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
 
@@ -95,6 +99,7 @@ public class ServerInterface {
 		
 	}
 	
+	
 	public Flights getFlightsFor2Days(String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
 		//add 1 day and search tomorrow's flights
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
@@ -108,13 +113,36 @@ public class ServerInterface {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(deDate);
 		cal.add(Calendar.DATE, 1);
-		Flights flights=this.getFlights(teamName, airportCode, Date, isByDeparture);
+		Flights flights=this.getFlights(teamName, airportCode, Date, isByDeparture);//first and second day
 		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
 	
 		return flights;
 		
 	}
 	
+	public Flights getFlightsFor3Days(String teamName, String airportCode, String Date, boolean isByDeparture) throws NullPointerException {
+		//add 1 day and search tomorrow's flights
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd");
+		Date deDate=null;
+		try {
+			 deDate = sdf.parse(Date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(deDate);
+		cal.set(Calendar.DATE, cal.get(Calendar.DATE) + 1);
+		
+		Flights flights=this.getFlights(teamName, airportCode, Date, isByDeparture);//first and second day
+		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
+		
+		cal.set(Calendar.DATE, cal.get(Calendar.DATE) - 2);
+		flights.addAll(this.getFlights(teamName, airportCode,sdf.format( cal.getTime()), isByDeparture));
+		
+		return flights;
+		
+	}
 	
 	/**
 	 * get Flights, false: by arrival; true: by departure
@@ -165,7 +193,7 @@ public class ServerInterface {
 		}
 
 		xmlFlights = result.toString();
-//		System.out.println("xmlFlights"+xmlFlights);
+		System.out.println("xmlFlights"+xmlFlights);
 		flights = DaoFlights.addAll(xmlFlights);
 		
 		return flights;

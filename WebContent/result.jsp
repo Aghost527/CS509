@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="Demopackage.Democlass" %>0
+<%@ page import="Demopackage.Democlass" %>
 <%@ page import="driver.*" %>
 
 <!DOCTYPE html>
@@ -197,22 +197,39 @@
                 <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p><!--jsonStr[i].totalPrice-->
                 <p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p>
                 <ul class="list-unstyled">
-                  <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>
+                  <li><a id="d" href="#">Flight Details <span class="caret"></span></a></li>
                 </ul>
             </div>
 
-            <div id="detail1_content" style="display:none" class="col-sm-12 flight-div3">
-              <div class="col-sm-3">
-                <p>Flight 7962</p>
+            <div id="" style="" class="col-sm-12 flight-div3">
+              <div class="col-sm-12">
+                <div class="col-sm-3">
+                  <p>Flight 7962</p>  <!--jsonStr[i].ticketList[j].number -->
+                </div>
+                <div class="col-sm-3">
+                  <p>departs BOS 4:35p</p>  <!--jsonStr[i].ticketList[j].deTimeString.split(" ")[1] -->
+                </div>
+                <div class="col-sm-3">
+                  <p>arrives PVG 7:15p</p>  <!-- jsonStr[i].ticketList[j].arTimeString.split(" ")[1]-->
+                </div>
+                <div class="col-sm-3">
+                  <p>14h40m</p> <!-- jsonStr[i].ticketList[j].flightTime-->
+                </div>
               </div>
-              <div class="col-sm-3">
-                <p>departs BOS 4:35p</p>
-              </div>
-              <div class="col-sm-3">
-                <p>arrives PVG 7:15p</p>
-              </div>
-              <div class="col-sm-3">
-                <p>14h40m</p>
+
+              <div class="col-sm-12">
+                <div class="col-sm-3">
+                  <p>Flight 7962</p>  <!-- -->
+                </div>
+                <div class="col-sm-3">
+                  <p>departs BOS 4:35p</p>  <!-- -->
+                </div>
+                <div class="col-sm-3">
+                  <p>arrives PVG 7:15p</p>  <!-- -->
+                </div>
+                <div class="col-sm-3">
+                  <p>14h40m</p> <!-- -->
+                </div>
               </div>
             </div>
         </div>
@@ -257,11 +274,11 @@
               <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p>
               <p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p>
               <ul class="list-unstyled">
-                <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>
+                <li><a id=""  href="#">Flight Details <span class="caret"></span></a></li>
               </ul>
           </div>
 
-          <div id="detail1_content" style="display:none" class="col-sm-12 flight-div3">
+          <div id="" style="" class="col-sm-12 flight-div3">
             <div class="col-sm-3">
               <p>Flight 7962</p>
             </div>
@@ -317,31 +334,59 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
-    window.onload = createDiv();
-    var i = 1;
-    var test = "#detail" + i + "_tag";
-    $(document).ready(function(){
-      $(test).click(function(){
-        $("#detail1_content").toggle();
-      });
+//    window.onload = createDiv();
+    var i = 2;
+    var test1 = "#detail" + i + "_tag";
+    //var test2 = "#detail" + i + "_content";
+    var jsonStr=      <%
+      DriverManager driverManager=new DriverManager();
+      String str  = request.getParameter("customer_date").replace('-', '_');
+  out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  str, request.getParameter("customer_to"), request.getParameter("customer_timetype")));
+    %>
 
+
+
+    $(document).ready(function(){
+      createDiv();
     });
 
+    function myToggle(obj) {
+      var value = obj.id.replace(/[^0-9]/ig,"");
+      //alert(value);
+      var contentID = "detail" + value + "_content";
+      var tg = document.getElementById(contentID);
+      if (tg.style.display == 'none') {
+        tg.style.display = 'inline';
+      } else {
+        tg.style.display = 'none';
+      }
+    }
+
     function createDiv() {
-      var jsonStr=    	<%
-        DriverManager driverManager=new DriverManager();
-        String str  = request.getParameter("customer_date").replace('-', '_');
-
-    out.println(driverManager.search("", "", request.getParameter("customer_from"),  str, request.getParameter("customer_to")));
-
-      %>
-        var num = jsonStr.length;<!--è¿ä¸ªæ°å­éè¿è¿åflightæ°ç»çé¿åº¦å³å®-->
+        var num = jsonStr.length;
         var root = document.getElementById('root');
 
         for (var i = 0; i < jsonStr.length; i++) {
+          var txt_id = "detail" + i + "_tag";
+          var txt_content = "detail" + i + "_content";
+          var detail_txt = "";
+
+          for (var j = 0; j < jsonStr[i].ticketList.length; j++) {
+            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[i].ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[i].ticketList[j].departure + ' ' + jsonStr[i].ticketList[j].deTimeString.split(" ")[1] + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[i].ticketList[j].arrival + ' ' +
+            jsonStr[i].ticketList[j].arTimeString.split(" ")[1] + '</p></div><div class="col-sm-3"><p>' + jsonStr[i].ticketList[j].flightTime + 'minutes' + '</p></div></div>';
+          }
+
+
+
           root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
-          '<p>' + jsonStr[i].ticketList[0].departure + ' ' + jsonStr[i].deTimeString.split(" ")[1] +  ' - <br>' + jsonStr[i].ticketList[jsonStr[i].ticketList.length-1].arrival + ' ' + jsonStr[i].arTimeString.split(" ")[1] + '</p>' + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p><ul class="list-unstyled">  <li><a id="detail1_tag" href="#">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '</div></div>'
+          '<p>' + jsonStr[i].ticketList[0].departure + ' ' + jsonStr[i].deTimeString.split(" ")[1] +  ' - <br>' + jsonStr[i].ticketList[jsonStr[i].ticketList.length-1].arrival + ' ' + jsonStr[i].arTimeString.split(" ")[1] + '</p>'
+          + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
+          + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
         }
+
+
+
+
     }
 </script>
   </body>

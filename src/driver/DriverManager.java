@@ -19,14 +19,15 @@ import utils.Saps;
 
 public class DriverManager {
 
-	public List<Flights> searchFlightsWithoutStop(String departure, String time, String arrival) {
+	public List<Flights> searchFlightsWithoutStop(String departure, String time, String arrival,
+			boolean isByDeparture) {
 		List<Flights> flist = new ArrayList<Flights>();
 		arrival = arrival.equals("") ? "RDU" : arrival;
-		time = time.equals("") ? "2017_05_09" : time;
+		time = time.equals("") ? "2017_05_10" : time;
 		departure = departure.equals("") ? "BOS" : departure;
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(departure)));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture ? departure : arrival)));
 		Date d0 = null, d1 = null;
 		try {
 			d0 = sdf.parse(time + " 00:00:00");
@@ -38,12 +39,23 @@ public class DriverManager {
 
 		ServerInterface resSys = new ServerInterface();
 		// Flights flights = resSys.getFlighs("TeamE","BOS","2017_05_10",true);
-		Flights flights = resSys.getFlightsFor2Days("TeamE", departure, time, true);
-		flights.sortByArrivalAirport();
-		flights = flights.filterByArrival(arrival, flights);
+		Flights flights = new Flights();
+		flights = resSys.getFlightsFor2Days("TeamE", isByDeparture ? departure : arrival, time, isByDeparture);
+		if (isByDeparture) {
+
+			flights = flights.filterByArrival(arrival, flights);
+		} else {
+
+			flights = flights.filterByDeparture(departure, flights);
+		}
+		// System.out.println(flights.size() + "drivermanager");
+
 		for (Flight f : flights) {
-			// if(f.getDepartureTime().before(arg0))
-			if (f.getDepartureTime().before(d0) | f.getDepartureTime().after(d1)) {
+			
+			if (isByDeparture && (f.getDepartureTime().before(d0) || f.getDepartureTime().after(d1))) {
+				continue;
+			}
+			if ((!isByDeparture) && (f.getArrivalTime().before(d0) || f.getArrivalTime().after(d1))) {
 				continue;
 			}
 			Flights tmp = new Flights();
@@ -57,30 +69,29 @@ public class DriverManager {
 	/*
 	 * for the time being, it can only search flight within one day
 	 */
-	public List<Flights> searchFlightsWithOneStop(String departure, String time, String arrival) {
+	public List<Flights> searchFlightsWithOneStop(String departure, String time, String arrival,
+			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
 		List<Flights> res = new ArrayList<Flights>();
 		arrival = arrival.equals("") ? "RDU" : arrival;
-		time = time.equals("") ? "2017_05_09" : time;
+		time = time.equals("") ? "2017_05_10" : time;
 		departure = departure.equals("") ? "BOS" : departure;
 
-		// Flights flights1 =
-		// resSys.getFlightsFor2Days("TeamE","PHL","2017_05_10",true);
-		Flights flights1 = resSys.getFlightsFor2Days("TeamE", departure, time, true);// true
+
+//		if(isByDeparture){
+		Flights flights1 = resSys.getFlightsFor3Days("TeamE", departure, time, true);// true
 																						// means
 																						// search
 																						// by
 																						// departure
-		flights1.sortByArrivalAirport();
-		System.out.println(flights1.size());
 
-		// Flights flights2 =
-		// resSys.getFlightsFor2Days("TeamE","RDU","2017_05_10",false);
+
+	
 		Flights flights2 = resSys.getFlightsFor2Days("TeamE", arrival, time, false);
-		flights2.sortByArrivalAirport();
+//		flights2.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(departure)));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture?departure:arrival)));
 
 		Date d0 = null, d1 = null;
 		try {
@@ -92,12 +103,17 @@ public class DriverManager {
 		}
 
 		for (Flight f1 : flights1) {
-			if (f1.getDepartureTime().before(d0) | f1.getDepartureTime().after(d1)) {
+			if (isByDeparture && f1.getDepartureTime().before(d0) | f1.getDepartureTime().after(d1)) {
 				continue;
 			}
 
+			
+			
 			for (Flight f2 : flights2) {
-//				System.out.println(f2.getDeparture());
+				// System.out.println(f2.getDeparture());
+				if ((!isByDeparture) && (f2.getArrivalTime().before(d0) || f2.getArrivalTime().after(d1))) {
+					continue;
+				}
 				if (f1.getArrival().equals(f2.getDeparture()) & f1.getArrivalTime().before(f2.getDepartureTime())) {
 					long diff = f2.getDepartureTime().getTime() - f1.getArrivalTime().getTime();
 					long minutes = diff / (1000 * 60);
@@ -118,17 +134,18 @@ public class DriverManager {
 
 	}
 
-	public List<Flights> searchFlightsWithTwoStop(String departure, String time, String arrival) {
+	public List<Flights> searchFlightsWithTwoStop(String departure, String time, String arrival,
+			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
 		List<Flights> res = new ArrayList<Flights>();
 		HashMap<String, Flights> map = new HashMap<String, Flights>();
 		arrival = arrival.equals("") ? "RDU" : arrival;
-		time = time.equals("") ? "2017_05_09" : time;
+		time = time.equals("") ? "2017_05_10" : time;
 		departure = departure.equals("") ? "BOS" : departure;
 
 		// Flights flights1 =
 		// resSys.getFlightsFor2Days("TeamE","PHL","2017_05_10",true);
-		Flights flights1 = resSys.getFlightsFor2Days("TeamE", departure, time, true);// true
+		Flights flights1 = resSys.getFlightsFor3Days("TeamE", departure, time, true);// true
 																						// means
 																						// search
 																						// by
@@ -141,7 +158,7 @@ public class DriverManager {
 		flights3.sortByArrivalAirport();
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd HH:mm:ss");
-		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(departure)));
+		sdf.setTimeZone(TimeZone.getTimeZone("GMT" + Saps.timeZoneMap.get(isByDeparture?departure:arrival)));
 
 		Date d0 = null, d1 = null;
 		try {
@@ -153,7 +170,7 @@ public class DriverManager {
 		}
 
 		for (Flight f1 : flights1) {
-			if (f1.getDepartureTime().before(d0) | f1.getDepartureTime().after(d1)) {
+			if (isByDeparture && f1.getDepartureTime().before(d0) | f1.getDepartureTime().after(d1)) {
 				continue;
 			}
 
@@ -170,6 +187,9 @@ public class DriverManager {
 					}
 
 					for (Flight f3 : flights3) {
+						if ((!isByDeparture) && (f3.getArrivalTime().before(d0) || f3.getArrivalTime().after(d1))) {
+							continue;
+						}
 						if (f3.getDeparture().equals(f2.getArrival())
 								& f3.getDepartureTime().after(f2.getDepartureTime())) {
 							long diff23 = (f3.getDepartureTime().getTime() - f2.getArrivalTime().getTime()) / 60000; // 60000ms==1
@@ -223,37 +243,40 @@ public class DriverManager {
 		return res + "</Flights>";
 
 	}
-	
-	public List<Flights> filterWithSeats(){
+
+	public List<Flights> filterWithSeats() {
 		return null;
-		
+
 	}
-	
-	public JSONArray search(String tripType, String seatType, String departure,  String date,String arrival) {
+
+	public JSONArray search(String tripType, String seatType, String departure, String date, String arrival,
+			String timeType) {
 		List<Flights> flightlis = new ArrayList<Flights>();
-		List<Tickets> tlist=new ArrayList<Tickets>();
+		List<Tickets> tlist = new ArrayList<Tickets>();
 		DriverManager driverManager = new DriverManager();
-		
-		arrival = arrival.equals("")|arrival.equals(null)|arrival.equals("null")|arrival==null ? "RDU" : arrival;
-		date = date.equals("")|date.equals(null)|date.equals("null")|date==null ? "2017_05_09" : date;
-		departure = departure.equals("")|departure.equals(null)|departure.equals("null")|departure==null ? "BOS" : departure;
-		seatType = seatType.equals("")|seatType.equals(null)|seatType.equals("null")|seatType==null ? "Coach" : seatType;
-		
-		
-		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival ));
+		boolean isByDeparture= timeType.equals("Departure")?true:false;
+		arrival = arrival.equals("") | arrival.equals(null) | arrival.equals("null") | arrival == null ? "RDU"
+				: arrival;
+		date = date.equals("") | date.equals(null) | date.equals("null") | date == null ? "2017_05_10" : date;
+		departure = departure.equals("") | departure.equals(null) | departure.equals("null") | departure == null ? "BOS"
+				: departure;
+		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Coach"
+				: seatType;
 
-		flightlis.addAll(driverManager.searchFlightsWithOneStop(departure, date, arrival ));
+		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival, isByDeparture));
 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival ));
+		flightlis.addAll(driverManager.searchFlightsWithOneStop(departure, date, arrival, isByDeparture));
 
-		for(Flights f:flightlis){
-			if(TicketController.validateFlights(f, seatType)){
-				tlist.add(new Tickets(f, seatType)); 
+		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival, isByDeparture));
+
+		for (Flights f : flightlis) {
+			if (TicketController.validateFlights(f, seatType)) {
+				tlist.add(new Tickets(f, seatType));
 			}
 		}
-		
+
 		JSONArray jsonArray = JSONArray.fromObject(tlist);
-//		System.out.println(jsonArray);
+		// System.out.println(jsonArray);
 		return jsonArray;
 
 	}

@@ -98,6 +98,17 @@ public class Flights extends ArrayList<Flight> {
 		}
 		return res;
 	}
+	
+	public Flights filterByDeparture(String dep, Flights flights){
+		Flights res= new Flights();
+		for(Flight flight: flights){
+			if(flight.getDeparture().equals(dep)){
+				res.add(flight);
+			}
+		}
+		return res;
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

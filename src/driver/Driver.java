@@ -59,20 +59,21 @@ public class Driver extends HttpServlet  {
 		String time = s.nextLine();
 		System.out.println("arrivalAiportCode e.g. RDU :");
 		String arrival = s.nextLine();
-		driverManager.search("", "", "", "", "");
+//		driverManager.search("", "", "", "", "");
 //		driverManager.search("", "", departure, arrival, time);
 		     
 		System.out.println("finished");
 		
-		List<Flights> flightlis = driverManager.searchFlightsWithoutStop(departure, time, arrival );
+		List<Flights> flightlis=new ArrayList<Flights>();
+//		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, time, arrival, false ));
 
 		
 //		List<Flights> 
-		flightlis.addAll( driverManager.searchFlightsWithOneStop(arrival, time, departure));
+//		flightlis.addAll( driverManager.searchFlightsWithOneStop(departure, time,arrival, false ));
 
 		
 //		List<Flights> 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(arrival, time, departure));
+		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, time, arrival, false));
 
 		//output
 		for(Flights flight  :flightlis){
@@ -82,7 +83,7 @@ public class Driver extends HttpServlet  {
 		
 
         JSONArray jsonArray = JSONArray.fromObject( flightlis );  
-        System.out.println( jsonArray );  
+//        System.out.println( jsonArray );  
         
 		System.out.println("finished");
 		System.out.println("result size:"+flightlis.size());

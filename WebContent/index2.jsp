@@ -86,23 +86,12 @@
                 <label class="col-sm-1 color-1">Cabin</label>
                 <div class="col-sm-2">
                   <label class="color-1">
-                    <input type="radio" name="customer_cabin" id="Coach" value="Coach" checked>
-                    Coach
+                    <input type="radio" name="customer_cabin" id="economy" value="Economy" checked>
+                    Economy
                   </label>
                   <label class="color-1">
-                    <input type="radio" name="customer_cabin" id="First-Class" value="First-Class">
-                    First-Class
-                  </label>
-                </div>
-                <label class="col-sm-1 color-1">Time Type</label>
-                <div class="col-sm-2">
-                  <label class="color-1">
-                    <input type="radio" name="customer_timetype" id="Departure" value="Departure" checked>
-                    Departure
-                  </label>
-                  <label class="color-1">
-                    <input type="radio" name="customer_timetype" id="Arrival" value="Arrival">
-                    Arrival
+                    <input type="radio" name="customer_cabin" id="premium" value="Premium">
+                    Premium
                   </label>
                 </div>
               </div>
