@@ -35,7 +35,24 @@ public class Tickets  {
 		this.deTimeString = deTimeString;
 		this.arTimeString = arTimeString;
 	}
-
+	
+	
+	
+	public Tickets(List<Ticket> ticketList, String totalFlightTime , int totalFlightMinute) {
+	
+		this.ticketList = ticketList;
+		
+//		long diff = (ticketList.get(ticketList.size()-1).getArrivalTime().getTime() - ticketList.get(0).getDepartureTime().getTime()) / 60000;
+		
+//		this.totalPrice = totalPrice;
+//		this.totalFlightTime = totalFlightTime;
+		SeatType = "";
+		this.totalFlightTime=totalFlightTime;
+		this.totalFlightMinute=totalFlightMinute;
+		this.setDeTimeString(ticketList.get(0).getDeTimeString());
+		this.setArTimeString(ticketList.get(ticketList.size()-1).getArTimeString());
+	}
+	
 	/**
 	 * @param t
 	 * @param totalPrice
