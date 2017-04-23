@@ -71,8 +71,8 @@ public class Driver extends HttpServlet  {
 		     
 		System.out.println("finished");
 		
-//		List<Flights> flightlis=new ArrayList<Flights>();
-//		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, time, arrival, false ));
+		List<Flights> flightlis=new ArrayList<Flights>();
+		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, time, arrival, false ));
 
 		
 //		List<Flights> 
@@ -89,10 +89,10 @@ public class Driver extends HttpServlet  {
 //	}
 //		
 //
-//        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
-////        System.out.println( jsonArray );  
+        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
+        System.out.println( jsonArray );  
 //        
-//		System.out.println("finished");
+		System.out.println("finished");
 //		System.out.println("result size:"+flightlis.size());
 		
 		

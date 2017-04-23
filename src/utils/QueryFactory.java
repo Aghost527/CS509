@@ -41,7 +41,7 @@ public class QueryFactory {
 	
 	
 	public static String reserveSeats(String teamName, String xmlFlights){
-		return "?team=" + teamName + "&action=buyTickets&flightData=" +xmlFlights ;
+		return "team=" + teamName + "&action=buyTickets&flightData=" +xmlFlights ;
 	}
 	
 	/**

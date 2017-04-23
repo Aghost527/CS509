@@ -7,13 +7,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 
+import airplane.Airplane;
 import dao.ServerInterface;
 import flight.Flight;
 import flight.Flights;
 import net.sf.json.JSONArray;
 import ticket.RoundTickets;
+import ticket.Ticket;
 import ticket.TicketController;
 import ticket.Tickets;
 import utils.Saps;
@@ -234,7 +237,16 @@ public class DriverManager {
 	public String flights2xml(Flights flist, String seatType) {
 		String res = "<Flights>";
 		for (Flight f : flist) {
-			res += "<Flight number=" + f.getNumber() + " seating=" + seatType + "/>";
+			res += "<Flight number=" + "\"" +f.getNumber()+"\"" + " seating=" + "\""+seatType+"\"" + "/>";
+		}
+		return res + "</Flights>";
+
+	}
+	
+	public String tickets2xml(Tickets tlist) {
+		String res = "<Flights>";
+		for (Ticket t : tlist.getTicketList()) {
+			res += "<Flight number=" + "\"" +t.getNumber()+"\"" + " seating=" + "\""+t.getSeatType()+"\"" + "/>";
 		}
 		return res + "</Flights>";
 
@@ -258,6 +270,9 @@ public class DriverManager {
 		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Coach"
 				: seatType;
 		
+		//create airplane map
+		Map<String, Airplane> airplanes = new ServerInterface().getAirplanes("TeamE");
+		
 		//generate outbound trips
 		flightlis.addAll(driverManager.searchFlightsWithoutStop(departure, date, arrival, isByDeparture));
 
@@ -265,13 +280,8 @@ public class DriverManager {
 
 		flightlis.addAll(driverManager.searchFlightsWithTwoStop(departure, date, arrival, isByDeparture));
 		
-		for (Flights f : flightlis) {
-			if (TicketController.validateFlights(f, seatType)) {
-				tlist.add(new Tickets(f, seatType));
-			}
-		}
 		
-		jsonArray=JSONArray.fromObject(tlist);
+
 		
 		//generate return trips
 		if(tripType.equals("RoundTrip")|tripType.equals("Roundtrip")|tripType.equals("Round_Trip")|tripType.equals("roundtrip")){
@@ -297,11 +307,24 @@ public class DriverManager {
 					}
 				}
 			}
+			jsonArray=JSONArray.fromObject(rlist);
+		}
+		
+		
+		//or generate one-way tickets
+		else{
+			for (Flights f : flightlis) {
+				if (TicketController.validateFlights(f, seatType)) {
+//					airplanes.get()
+					tlist.add(new Tickets(f, seatType));
+				}
+			}
+			
 			jsonArray=JSONArray.fromObject(tlist);
 		}
-
 		
-		 System.out.println(jsonArray);
+		
+		 System.out.println("json: "+jsonArray);
 		return jsonArray;
 
 	}

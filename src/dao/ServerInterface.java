@@ -356,55 +356,43 @@ public class ServerInterface {
 	}
 
 	public boolean buyTickets (String teamName, String xmlFlights) {
-
 		URL url;
 		HttpURLConnection connection;
-
-		try {
-			/**
-			 * Create an HTTP connection to the server for a POST 
-			 */
-			url = new URL(mUrlBase + QueryFactory.reserveSeats(teamName, xmlFlights));
+		try{
+			url = new URL(mUrlBase);
 			connection = (HttpURLConnection) url.openConnection();
+			
+			// header
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("User-Agent", teamName);
-
-			/**
-			 * If response code of SUCCESS read the XML string returned
-			 * line by line to build the full return string
-			 */
+			connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+			
+			// write bytes
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+			String params = QueryFactory.reserveSeats(teamName, xmlFlights);
+			System.out.println("\nSending " + params);
+			DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
+			writer.writeBytes(params);
+			writer.flush();
+			writer.close();
+			
+			//get response code
 			int responseCode = connection.getResponseCode();
-			System.out.println("\nSending 'POST' to buy ticket");
+			System.out.println("\nSending 'POST' to reserve seats");
 			System.out.println(("\nResponse Code : " + responseCode));
-//			if (responseCode >= HttpURLConnection.HTTP_OK) {
-//				String encoding = connection.getContentEncoding();
-//				encoding = (encoding == null ? "UTF-8" : encoding);
-//			
-//				
-//
-//			}
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String line;
-			StringBuffer response = new StringBuffer();
 			
-			while ((line = in.readLine()) != null) {
-				response.append(line);
+			if(responseCode >= 200 && responseCode <= 299){
+				return true;
+			}else{
+				return false;
 			}
-			in.close();
-			
-			System.out.println(response.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+				
 		}
-
-
-
-		//daoflights
-		return true;
-		
+		catch(IOException e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 }

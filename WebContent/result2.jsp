@@ -162,7 +162,7 @@
 
 
         <!--add here -->
-    <!--    <button type="button" value="golist" onclick="window.location='index.jsp';">abcdefg</button>  -->
+
         <div class="row flight-div1" >
           <div class="col-sm-7 row-content flight-div2">
 
@@ -271,24 +271,7 @@
           </div>
           <div class="col-sm-3">
               <p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>1,663</p>
-              <p>
-                <button class="btn btn-success" type="button" value="golist" data-toggle="modal" data-target="#successmodal1">Select111</button>
-                <div class="modal fade" id="successmodal1" tabindex="-1" role="dialog">
-	                <div class="modal-dialog">
-		                <div class="modal-content">
-			                <div class="modal-header">
-				                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times; </button>
-				                <h4 class="modal-title">Ticket Concirmation</h4>
-                      </div>
-			                <div class="modal-body">Are you sure to buy this ticket?</div>
-			                <div class="modal-footer">
-				                  <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-				                  <button type="button" class="btn btn-primary" onclick="myForward();">Yes</button>
-			                </div>
-		                </div><!-- /.modal-content -->
-	               </div><!-- /.modal -->
-               </div>
-              </p>
+              <p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p>
               <ul class="list-unstyled">
                 <li><a id=""  href="#">Flight Details <span class="caret"></span></a></li>
               </ul>
@@ -349,24 +332,15 @@
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script language="javascript">
-
 //    window.onload = createDiv();
     var i = 2;
     var test1 = "#detail" + i + "_tag";
     //var test2 = "#detail" + i + "_content";
-    var jsonStr=    	<%
+    var jsonStr=      <%
       DriverManager driverManager=new DriverManager();
       String str  = request.getParameter("customer_date").replace('-', '_');
-      String str2 = "";
-      String returntype = "";
-      if(request.getParameter("customer_triptype").equals("Roundtrip")){
-        str2  = request.getParameter("customer_returndate").replace('-', '_');
-        returntype = request.getParameter("customer_returntimetype");
-      }
-    out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  str, request.getParameter("customer_to"), request.getParameter("customer_timetype"),str2,returntype));
+  out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  str, request.getParameter("customer_to"), request.getParameter("customer_timetype"),"",""));
     %>
 
 
@@ -387,10 +361,6 @@
       }
     }
 
-    function myForward() {
-      window.location='success.jsp?flight=123&date=456#';
-    }
-
     function createDiv() {
         var num = jsonStr.length;
         var root = document.getElementById('root');
@@ -398,33 +368,21 @@
         for (var i = 0; i < jsonStr.length; i++) {
           var txt_id = "detail" + i + "_tag";
           var txt_content = "detail" + i + "_content";
-          var forward_List = "success.jsp?";
-
           var detail_txt = "";
-          var select_txt = "";
 
           for (var j = 0; j < jsonStr[i].ticketList.length; j++) {
-            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[i].ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[i].ticketList[j].departure + ' ' + jsonStr[i].ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[i].ticketList[j].arrival + ' ' +
-            jsonStr[i].ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + jsonStr[i].ticketList[j].flightTime + 'minutes' + '</p></div></div>';
-
-            forward_List += "flight" + j + '=' + jsonStr[i].ticketList[j].number + '&' + 'seatType' + j + '=' + jsonStr[i].ticketList[j].seatType;
-            if (j != jsonStr[i].ticketList.length - 1) {
-              forward_List += '&';
-            }
+            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[i].ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[i].ticketList[j].departure + ' ' + jsonStr[i].ticketList[j].deTimeString.split(" ")[1] + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[i].ticketList[j].arrival + ' ' +
+            jsonStr[i].ticketList[j].arTimeString.split(" ")[1] + '</p></div><div class="col-sm-3"><p>' + jsonStr[i].ticketList[j].flightTime + 'minutes' + '</p></div></div>';
           }
-          forward_List += '#';
-          //alert(forward_List);
-
-
-          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onclick="window.location=&apos;' + forward_List + '&apos;;">Yes</button></div></div></div></div>';
 
 
 
           root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
           '<p>' + jsonStr[i].ticketList[0].departure + ' ' + jsonStr[i].deTimeString.split(" ")[1] +  ' - <br>' + jsonStr[i].ticketList[jsonStr[i].ticketList.length-1].arrival + ' ' + jsonStr[i].arTimeString.split(" ")[1] + '</p>'
-          + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
+          + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p><a href="#" type="button" class="btn btn-success" id="select1">Select</a></p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
           + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
         }
+
 
 
 

@@ -95,7 +95,7 @@
                   </label>
                 </div>
                 <label class="col-sm-1 color-1">Time Type</label>
-                <div class="col-sm-2" id="adjust4">
+                <div class="col-sm-2">
                   <label class="color-1">
                     <input type="radio" name="customer_timetype" id="Departure" value="Departure" checked>
                     Departure
@@ -110,20 +110,14 @@
           </form>
         </div>
       </div>
-    </div>
 
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
     var flag = 0;
-
     var txt = '<div class="col-sm-2"><input class="form-control" type="date" name="customer_date" id="date1"; required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>';  <!--若要插入一段html代码，需要用单引号。双引号会报错。 -->
-
-    var txt1 = '<div class="col-sm-2"><input class="form-control" type="date"id="date2"name="customer_date" required></div><div class="col-sm-2"><input class="form-control" type="date"id="date3"name="customer_returndate" required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>'
-
-    var txt2 = '<label id="adjust6" class="col-sm-1 color-1">Time Type</label><div class="col-sm-2" id="adjust5"><label class="color-1"><input type="radio" name="customer_returntimetype" id="Departure_return" value="Departure" checked>Departure</label><label class="color-1"><input type="radio" name="customer_returntimetype" id="Arrival_return" value="Arrival">Arrival</label></div>'
-
+    var txt1 = '<div class="col-sm-2"><input class="form-control" type="date"id="date2"name="customer_date1" required></div><div class="col-sm-2"><input class="form-control" type="date"id="date3"name="customer_date2" required></div><div id="adjust3" class="col-sm-2"><button type="submit" class="btn btn-md btn-primary btn-block" name="customer_search">Search</button></div>'
       $(function() {
           $("#one-way").click(function() {
             if(flag == 1) {
@@ -131,9 +125,6 @@
               $("#date2").remove();
               $("#date3").remove();
               $("#adjust2").after(txt);
-
-              $("#adjust5").remove();
-              $("#adjust6").remove();
               flag = 0;
             }
           });
@@ -145,9 +136,6 @@
               $("#date1").remove();
               $("#adjust3").remove();
               $("#adjust2").after(txt1);
-
-              $("#adjust4").after(txt2);
-
               flag = 1;
             }
           });
