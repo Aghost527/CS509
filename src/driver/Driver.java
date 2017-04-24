@@ -101,5 +101,15 @@ public class Driver extends HttpServlet  {
 //		System.out.println("result size:"+flightlis.size());
 		
 		
+//		//----test buy tickets--------
+//		boolean isLocked = resSys.lock(teamName);
+//		System.out.println("Server is locked: " + isLocked);
+//		
+//		String xmlFlights = "<Flights><Flight number=\"34316\" seating=\"Coach\"/></Flights>";
+//		boolean isBought = resSys.buyTickets(teamName, xmlFlights);
+//		System.out.println("IS Bought Tickets: " + isBought);
+//		
+//		//----end test buy tickets--------
+		
 	}
 }
