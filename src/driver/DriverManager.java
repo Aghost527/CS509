@@ -66,6 +66,7 @@ public class DriverManager {
 			tmp.add(f);
 			flist.add(tmp);
 		}
+		System.out.println("0 stops res size:" + flist.size());
 		return flist;
 
 	}
@@ -126,7 +127,7 @@ public class DriverManager {
 				}
 			}
 		}
-		System.out.println("res size:" + res.size());
+		System.out.println("one stop res size:" + res.size());
 		// Flights flights2 =
 
 		return res;
@@ -210,7 +211,7 @@ public class DriverManager {
 
 		}
 
-		System.out.println("res size:" + res.size());
+		System.out.println("two stops res size:" + res.size());
 		// Flights flights2 =
 
 		return res;
@@ -328,9 +329,11 @@ public class DriverManager {
 					}
 					if(f1.get(f1.size()-1).getArrivalTime().before(f2.get(0).getDepartureTime())){
 						rlist.add(new RoundTickets(new Tickets(f1,seatType),new Tickets(f2,seatType)));
+						System.out.println("rlist added:"+rlist.size());
 					}
 				}
 			}
+			System.out.println("rlist len:"+rlist.size());
 			jsonArray=JSONArray.fromObject(rlist);
 		}
 		
@@ -343,12 +346,12 @@ public class DriverManager {
 					tlist.add(new Tickets(f, seatType));
 				}
 			}
-			
+			System.out.println("tlist len:"+tlist.size());
 			jsonArray=JSONArray.fromObject(tlist);
 		}
 		
 		
-		 System.out.println("json: "+jsonArray);
+//		 System.out.println("json: "+jsonArray);
 		return jsonArray;
 
 	}

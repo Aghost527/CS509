@@ -155,7 +155,7 @@
       <div class="border" style="min-height: 100px">
         <p style="padding:6px min-height: 0px"></p>
       </div>
-      <div class="root-content border" id="root" style="height:600px;width:1218px;overflow:auto;overflow-x:hidden;margin-top:0px;">
+      <div class="root-content border" id="root" style="height:400px;width:1218px;overflow:auto;overflow-x:hidden;margin-top:0px;">
         <div class="col-sm-7 padding-div" >
 
         </div>
@@ -215,9 +215,7 @@
                   <p>14h40m</p> <!-- jsonStr[i].ticketList[j].flightTime-->
                 </div>
               </div>
-            </div>
 
-            <div id="" style="" class="col-sm-12 flight-div3">
               <div class="col-sm-12">
                 <div class="col-sm-3">
                   <p>Flight 7962</p>  <!-- -->
@@ -285,7 +283,7 @@
 			                <div class="modal-body">Are you sure to buy this ticket?</div>
 			                <div class="modal-footer">
 				                  <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-				                  <button type="button" class="btn btn-primary">Yes</button>
+				                  <button type="button" class="btn btn-primary" onclick="myForward();">Yes</button>
 			                </div>
 		                </div><!-- /.modal-content -->
 	               </div><!-- /.modal -->
@@ -355,15 +353,9 @@
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script language="javascript">
 
-    var triptype = 1;
-    <%
-      int trtpe = 1;
-      if (request.getParameter("customer_triptype").equals("Roundtrip")) {
-        trtpe = 2;
-      }
-    %>
-    triptype = <%=trtpe%>;
-
+//    window.onload = createDiv();
+    var i = 2;
+    var test1 = "#detail" + i + "_tag";
     //var test2 = "#detail" + i + "_content";
     var jsonStr=    	<%
       DriverManager driverManager=new DriverManager();
@@ -371,7 +363,6 @@
       String str2 = "";
       String returntype = "";
       if(request.getParameter("customer_triptype").equals("Roundtrip")){
-
         str2  = request.getParameter("customer_returndate").replace('-', '_');
         returntype = request.getParameter("customer_returntimetype");
       }
@@ -381,30 +372,18 @@
 
 
     $(document).ready(function(){
-      if (triptype == 1) {
-        createDiv1();
-      } else {
-        createDiv2();
-      }
+      createDiv();
     });
 
     function myToggle(obj) {
       var value = obj.id.replace(/[^0-9]/ig,"");
       //alert(value);
-      var contentID1 = "detail" + value + "_content";
-      var contentID2 = "Detail" + value + "_content";
-      var tg = document.getElementById(contentID1);
-      var tg2 = document.getElementById(contentID2);
+      var contentID = "detail" + value + "_content";
+      var tg = document.getElementById(contentID);
       if (tg.style.display == 'none') {
         tg.style.display = 'inline';
       } else {
         tg.style.display = 'none';
-      }
-
-      if (tg2.style.display == 'none') {
-        tg2.style.display = 'inline';
-      } else {
-        tg2.style.display = 'none';
       }
     }
 
@@ -412,7 +391,7 @@
       window.location='success.jsp?flight=123&date=456#';
     }
 
-    function createDiv1() {
+    function createDiv() {
         var num = jsonStr.length;
         var root = document.getElementById('root');
 
@@ -446,73 +425,10 @@
           + '</div><div class="col-sm-4"><p>' + jsonStr[i].totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (jsonStr[i].ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
           + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
         }
-    }
 
-    function createDiv2() {
-        var len = 10;
-        if (jsonStr.length < len) {
-          len = jsonStr.length;
-        }
-        var num = jsonStr.length;
-        var root = document.getElementById('root');
-
-
-        for (var i = 0; i < len; i++) {
-          var txt_id = "detail" + i + "_tag";
-          var txt_content = "detail" + i + "_content";
-          var txt_content2 = "Detail" + i + "_content";
-          var forward_List = "success.jsp?";
-          var select_txt = "";
-          var detail_txt = "";
-          var detail_txt2 = "";
-
-          for (var j = 0; j < jsonStr[i].outboundTickets.ticketList.length; j++) {
-
-            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[i].outboundTickets.ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[i].outboundTickets.ticketList[j].departure + ' ' + jsonStr[i].outboundTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[i].outboundTickets.ticketList[j].arrival + ' ' +
-            jsonStr[i].outboundTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + jsonStr[i].outboundTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
-
-            forward_List += "flight" + j + '=' + jsonStr[i].outboundTickets.ticketList[j].number + '&' + 'seatType' + j + '=' + jsonStr[i].outboundTickets.ticketList[j].seatType;
-
-            forward_List += '&';
-
-          }
-
-          for (var j = 0; j < jsonStr[i].returnTickets.ticketList.length; j++) {
-
-            detail_txt2 += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[i].returnTickets.ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[i].returnTickets.ticketList[j].departure + ' ' + jsonStr[i].returnTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[i].returnTickets.ticketList[j].arrival + ' ' +
-            jsonStr[i].returnTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + jsonStr[i].returnTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
-
-            forward_List += "flight" + j + '=' + jsonStr[i].returnTickets.ticketList[j].number + '&' + 'seatType' + j + '=' + jsonStr[i].returnTickets.ticketList[j].seatType;
-            if (j != jsonStr[i].returnTickets.ticketList.length - 1) {
-              forward_List += '&';
-            }
-          }
-
-          forward_List += '#';
-          //alert(forward_List);
-
-
-          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onclick="window.location=&apos;' + forward_List + '&apos;;">Yes</button></div></div></div></div>';
-
-          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
-          '<p>' + jsonStr[i].outboundTickets.ticketList[0].departure + ' ' + jsonStr[i].outboundTickets.deTimeString.split(" ")[1] +  ' - <br>' + jsonStr[i].outboundTickets.ticketList[jsonStr[i].outboundTickets.ticketList.length-1].arrival + ' ' + jsonStr[i].outboundTickets.arTimeString.split(" ")[1] + '</p>'
-          + '</div><div class="col-sm-4"><p>' + jsonStr[i].outboundTickets.totalFlightTime + '</p></div><div class="col-sm-4">  <p>'  + (jsonStr[i].outboundTickets.ticketList.length-1) +  '</p></div></div>' + '<div class="col-sm-12"><div class="col-sm-4"><p>' + jsonStr[i].returnTickets.ticketList[0].departure + ' ' + jsonStr[i].returnTickets.deTimeString.split(" ")[1] + ' - <br>' +
-           jsonStr[i].returnTickets.ticketList[jsonStr[i].returnTickets.ticketList.length-1].arrival + ' ' + jsonStr[i].returnTickets.arTimeString.split(" ")[1] + '</p>' + '</div><div class="col-sm-4"><p>' + jsonStr[i].returnTickets.totalFlightTime + '</p></div><div class="col-sm-4"><p>' + (jsonStr[i].returnTickets.ticketList.length-1) + '</p></div></div>' + '</div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].roundTripTotalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this);">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>' + '<div id="' + txt_content2 + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt2 + '</div>'
-         + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>';
-
-
-
-/*
-            + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + jsonStr[i].roundTripTotalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onclick="myToggle(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + txt_content + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
-          + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
-        }
-*/
 
 
     }
-  }
-
-
 </script>
   </body>
 </html>

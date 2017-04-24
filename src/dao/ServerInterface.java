@@ -244,7 +244,7 @@ public class ServerInterface {
 		}
 
 		xmlFlights = result.toString();
-		System.out.println("xmlFlights"+xmlFlights);
+
 		flights = DaoFlights.addAll(airplanes,xmlFlights);
 		
 		return flights;
