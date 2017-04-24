@@ -249,7 +249,47 @@ public class DriverManager {
 		return buySuccess;
 		
 	}
-
+	
+	public String ArrayList2xml(ArrayList<String> flightNumber, ArrayList<String> seatingType){
+		String xmlFlights = "<Flights>";
+		int numFlights = flightNumber.size();
+		if(flightNumber.size() == seatingType.size()){
+			for(int i = 0; i < numFlights; i++){
+				xmlFlights +="<Flight number=" + "\"" + flightNumber.get(i) + "\"" + " seating=" + "\"" + seatingType.get(i) + "\"" + "/>";
+			}
+		}else{
+			return xmlFlights + "</Flights>";
+		}
+		return xmlFlights + "</Flights>";
+	}
+	
+	public String str2xml(String flightNumber, String seatingType){
+		String xmlFlights = "<Flights>";
+		String[] fNumber = flightNumber.split(",");
+		String[] sType = seatingType.split(",");
+		int numFlights = fNumber.length;
+		if(fNumber.length == sType.length){
+			for(int i = 0; i < numFlights; i++){
+				xmlFlights +="<Flight number=" + "\"" + fNumber[i] + "\"" + " seating=" + "\"" + sType[i] + "\"" + "/>";
+			}
+		}else{
+			return xmlFlights + "</Flights>";
+		}
+		return xmlFlights + "</Flights>";
+	}
+	
+	public boolean buyTicket(String xmlFlights, String teamName){
+		ServerInterface resSys = new ServerInterface();
+		boolean isLocked;
+		boolean buySuccess;
+		do{
+			isLocked = resSys.lock(teamName);
+		}while(!isLocked);
+		buySuccess = resSys.buyTickets(teamName, xmlFlights);
+		resSys.unlock(teamName);
+		return buySuccess;
+	}
+	
 	/**
 	 * <Flights> <Flight number=DDDDD seating=SEAT_TYPE/> <Flight number=DDDDD
 	 * seating=SEAT_TYPE/> </Flights>
