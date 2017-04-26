@@ -15,10 +15,11 @@ import dao.ServerInterface;
 import flight.Flight;
 import flight.Flights;
 import net.sf.json.JSONArray;
-import ticket.RoundTickets;
+
 import ticket.Ticket;
 import ticket.TicketController;
 import ticket.Tickets;
+import ticket.Ticketsort;
 import utils.Saps;
 
 public class DriverManager {
@@ -217,7 +218,25 @@ public class DriverManager {
 		return res;
 
 	}
-
+	
+	public int buyTicket(String seatTypes, String flightNums) {
+		ServerInterface resSys = new ServerInterface();
+		String xmlFlights = flights2xml(flightNums, seatTypes);
+		if(flightNums.length()==0)return 2;
+		boolean isLocked;
+		int buySuccess;
+		
+		do{
+			isLocked = resSys.lock("TeamE"); // is locked DB
+		}while(!isLocked); // if DB is locked by teamName, then go to reserve tickets.
+		
+		buySuccess = resSys.buyTickets("TeamE", xmlFlights)?1:0;//2 nothing; 1 success; 0 fail
+		resSys.unlock("TeamE");
+		return buySuccess;
+		
+	}
+	
+	
 	public boolean buyTicket(Flights flist, String seatType, String teamName) {
 		ServerInterface resSys = new ServerInterface();
 		String xmlFlights = flights2xml(flist, seatType);
@@ -307,6 +326,18 @@ public class DriverManager {
 
 	}
 	
+	public String flights2xml(String flightNums, String seatTypes) {
+		String[] fs=flightNums.split(",");
+		String[] ss=seatTypes.split(",");
+		
+		String res = "<Flights>";
+		for (int i=0;i<fs.length;i++) {
+			res += "<Flight number=" + "\"" +fs[i]+"\"" + " seating=" + "\""+ss[i]+"\"" + "/>";
+		}
+		return res + "</Flights>";
+
+	}
+	
 	public String tickets2xml(Tickets tlist) {
 		String res = "<Flights>";
 		for (Ticket t : tlist.getTicketList()) {
@@ -318,10 +349,13 @@ public class DriverManager {
 
 	public JSONArray search(String tripType, String seatType, String departure, String date, String arrival,
 			String timeType, String returndate,String returntimeType) {
-		List<Flights> flightlis = new ArrayList<Flights>();
-		List<Tickets> tlist = new ArrayList<Tickets>();
+		List<Flights> flightlist = new ArrayList<Flights>();
+		List<Tickets> outboundlist = new ArrayList<Tickets>();
+		List<List<Tickets>> result = new ArrayList<List<Tickets>>();
 		JSONArray jsonArray = null;
 		DriverManager driverManager = new DriverManager();
+		Ticketsort sorter=new Ticketsort();
+		
 		boolean isByDeparture = timeType.equals("Departure") ? true : false;
 		boolean isByDeparture2 = returntimeType.equals("Departure") ? true : false;
 		arrival = arrival.equals("") | arrival.equals(null) | arrival.equals("null") | arrival == null ? "RDU"
@@ -338,59 +372,51 @@ public class DriverManager {
 		Map<String, Airplane> airplanes = new ServerInterface().getAirplanes("TeamE");
 		
 		//generate outbound trips
-		flightlis.addAll(driverManager.searchFlightsWithoutStop(airplanes,departure, date, arrival, isByDeparture));
+		flightlist.addAll(driverManager.searchFlightsWithoutStop(airplanes,departure, date, arrival, isByDeparture));
 
-		flightlis.addAll(driverManager.searchFlightsWithOneStop(airplanes,departure, date, arrival, isByDeparture));
+		flightlist.addAll(driverManager.searchFlightsWithOneStop(airplanes,departure, date, arrival, isByDeparture));
 
-		flightlis.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
+		flightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
 		
+		//or generate one-way tickets
+			for (Flights f : flightlist) {
+				if (TicketController.validateFlights(f, seatType)) {
+					outboundlist.add(new Tickets(f, seatType));
+				}
+			}
+			System.out.println("outboundlist len:"+outboundlist.size());
 		
+//		sorter.sortbyDepartureTime(outboundlist);
+			
+		result.add(outboundlist);
 
 		
 		//generate return trips
 		if(tripType.equals("RoundTrip")|tripType.equals("Roundtrip")|tripType.equals("Round_Trip")|tripType.equals("roundtrip")){
-			List<RoundTickets> rlist = new ArrayList<RoundTickets>();
-			List<Flights> flightlis2 = new ArrayList<Flights>();
+			List<Flights> returnflightlist = new ArrayList<Flights>();
+			List<Tickets> returnlist=new ArrayList<Tickets>();
 			
-			flightlis2.addAll(driverManager.searchFlightsWithoutStop(airplanes,arrival, returndate, departure, isByDeparture2));
+			returnflightlist.addAll(driverManager.searchFlightsWithoutStop(airplanes,arrival, returndate, departure, isByDeparture2));
 
-			flightlis2.addAll(driverManager.searchFlightsWithOneStop(airplanes,arrival, returndate, departure, isByDeparture2));
+			returnflightlist.addAll(driverManager.searchFlightsWithOneStop(airplanes,arrival, returndate, departure, isByDeparture2));
 
-			flightlis2.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
+			returnflightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
 			
-			//return should be later than outbound
-			for (Flights f1 : flightlis) {
-				if (!TicketController.validateFlights(f1, seatType)){
-					continue;
-				}
-				for (Flights f2 : flightlis2) {
-					if (!TicketController.validateFlights(f2, seatType)){
-						continue;
-					}
-					if(f1.get(f1.size()-1).getArrivalTime().before(f2.get(0).getDepartureTime())){
-						rlist.add(new RoundTickets(new Tickets(f1,seatType),new Tickets(f2,seatType)));
-						System.out.println("rlist added:"+rlist.size());
-					}
-				}
+		//return should be later than outbound
+		for (Flights f2 : returnflightlist) {
+			if (!TicketController.validateFlights(f2, seatType)){
+				continue;
 			}
-			System.out.println("rlist len:"+rlist.size());
-			jsonArray=JSONArray.fromObject(rlist);
+			returnlist.add(new Tickets(f2, seatType));
 		}
-		
-		
-		//or generate one-way tickets
-		else{
-			for (Flights f : flightlis) {
-				if (TicketController.validateFlights(f, seatType)) {
-//					airplanes.get()
-					tlist.add(new Tickets(f, seatType));
-				}
-			}
-			System.out.println("tlist len:"+tlist.size());
-			jsonArray=JSONArray.fromObject(tlist);
+			
+			
+		result.add(returnlist);
+		System.out.println("rlist len:"+returnlist.size());
 		}
+	
 		
-		
+		jsonArray=JSONArray.fromObject(result);
 //		 System.out.println("json: "+jsonArray);
 		return jsonArray;
 

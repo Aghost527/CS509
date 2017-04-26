@@ -150,18 +150,21 @@
           });
       });
 
-
+      //data validation
       $(function() {
           $("#customer_search").click(function() {
             if((
+              //The return time should not be before the outbound time
               $('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&
               new Date(document.getElementsByName("customer_date")[0].value.replace(/-/g,"\/")).getTime()  > 
               new Date(document.getElementsByName("customer_returndate")[0].value.replace(/-/g,"\/")).getTime())) {
                   alert("The return time should not be before the outbound time");
             }
+            //Departure city and Arrival city cannot be the same
             else if(document.getElementsByName("customer_from")[0].value==document.getElementsByName("customer_to")[0].value){
                   alert("Departure city and Arrival city cannot be the same");
             }
+            //Departure city or Arrival city cannot be empty
             else if(document.getElementsByName("customer_from")[0].value==""||
               document.getElementsByName("customer_to")[0].value==""){
                   alert("Departure city or Arrival city cannot be empty");
@@ -175,7 +178,8 @@
                   '&customer_triptype='+$('input:radio[name="customer_triptype"]:checked').val()+
                   '&customer_cabin='+document.getElementsByName("customer_cabin")[0].value+
                   '&customer_timetype='+$('input:radio[name="customer_timetype"]:checked').val()+
-                  '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val();
+                  '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val()+
+                  "&seatTypes=&flightNums=";
              }
           });
       });

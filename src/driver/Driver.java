@@ -95,7 +95,7 @@ public class Driver extends HttpServlet  {
 //		
 //
 //        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
-//        System.out.println( jsonArray );  
+        System.out.println( jsonArray );  
 //        
 		System.out.println("finished");
 //		System.out.println("result size:"+flightlis.size());

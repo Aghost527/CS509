@@ -14,29 +14,38 @@ public class Tickets  {
 	private String SeatType;
 	private String deTimeString;
 	private String arTimeString;
+	private String flightNumbers="";
+	private String seatTypes="";
+	
 
+	
 	
 	
 	/**
 	 * @param ticketList
 	 * @param totalPrice
 	 * @param totalFlightTime
+	 * @param totalFlightMinute
 	 * @param seatType
 	 * @param deTimeString
 	 * @param arTimeString
+	 * @param flightNumbers
+	 * @param seatTypes
 	 */
-	public Tickets(List<Ticket> ticketList, Double totalPrice, String totalFlightTime, String seatType,
-			String deTimeString, String arTimeString) {
+	public Tickets(List<Ticket> ticketList, Double totalPrice, String totalFlightTime, int totalFlightMinute,
+			String seatType, String deTimeString, String arTimeString, String flightNumbers, String seatTypes) {
 		super();
 		this.ticketList = ticketList;
 		this.totalPrice = totalPrice;
 		this.totalFlightTime = totalFlightTime;
+		this.totalFlightMinute = totalFlightMinute;
 		SeatType = seatType;
 		this.deTimeString = deTimeString;
 		this.arTimeString = arTimeString;
+		this.flightNumbers = flightNumbers;
+		this.seatTypes = seatTypes;
 	}
-	
-	
+
 	
 	public Tickets(List<Ticket> ticketList, String totalFlightTime , int totalFlightMinute) {
 	
@@ -46,6 +55,11 @@ public class Tickets  {
 		
 //		this.totalPrice = totalPrice;
 //		this.totalFlightTime = totalFlightTime;
+		for(Ticket t:ticketList){
+			this.flightNumbers+=t.getNumber()+",";
+			this.seatTypes+=t.getSeatType()+",";
+		}
+		
 		SeatType = "";
 		this.totalFlightTime=totalFlightTime;
 		this.totalFlightMinute=totalFlightMinute;
@@ -67,6 +81,8 @@ public class Tickets  {
 				String tprice=f.getSeating().getCoachPrice().replace(",", "");
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
 				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "Coach", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
+				this.seatTypes+=seatType+",";
+				this.flightNumbers+=f.getNumber()+",";
 			}
 			
 		}
@@ -186,6 +202,38 @@ public class Tickets  {
 	 */
 	public void setTotalFlightMinute(int totalFlightMinute) {
 		this.totalFlightMinute = totalFlightMinute;
+	}
+
+
+	/**
+	 * @return the flightNumbers
+	 */
+	public String getFlightNumbers() {
+		return flightNumbers;
+	}
+
+
+	/**
+	 * @param flightNumbers the flightNumbers to set
+	 */
+	public void setFlightNumbers(String flightNumbers) {
+		this.flightNumbers = flightNumbers;
+	}
+
+
+	/**
+	 * @return the seatTypes
+	 */
+	public String getSeatTypes() {
+		return seatTypes;
+	}
+
+
+	/**
+	 * @param seatTypes the seatTypes to set
+	 */
+	public void setSeatTypes(String seatTypes) {
+		this.seatTypes = seatTypes;
 	}
 	
 	
