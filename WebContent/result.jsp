@@ -53,7 +53,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="#" onClick="confirmation1()" id="sortbyprice" name="sortbyprice">By Price</a></li>
-            <li><a href="#" id="sortbystops" name="sortbystops">By Stsops</a></li>
+            <li><a href="#" id="sortbystops" name="sortbystops">By Stops</a></li>
             <li><a href="#" id="sortbycompanies" name="sortbycompanies">By Companies</a></li>
             <li></li>
           </ul>
@@ -119,17 +119,7 @@
     }
     // data from back end
     var jsonStr=    	<%
-      
-      // String str  = request.getParameter("customer_date").replace('-', '_');
-      // String str2 = "";
-      // String returntype = "";
-
-      // if(request.getParameter("customer_triptype").equals("Roundtrip")){
-
-      //   str2  = request.getParameter("customer_returndate").replace('-', '_');
-      //   returntype = request.getParameter("customer_returntimetype");
-      // }f
-    out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
+     out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
     %>
     // data to back end;
     var seatTypeList="";
@@ -143,6 +133,11 @@
         createDiv();
       
     });
+
+    // check whether the result is empty, if the seatType is  , it means the result contains all possible seat types
+    function checkResult(){
+
+    }
 
     function toggleDetails(obj) {
       //get id number
@@ -214,14 +209,10 @@
     //for round way confirmation
     function confirmation2(i){
         if(true){
-          console.log(i);
-          console.log(ticketsList[i]);
-          console.log(ticketsList[i].flightNumbers);
-          console.log(ticketsList[i].seatTypes);
+     
           flightNumberList+= ticketsList[i].flightNumbers;
           seatTypeList+=ticketsList[i].seatTypes;
-          console.log("fl"+flightNumberList)
-          console.log("st"+seatTypeList)   
+         
           buyTickets();       
         }
     }
@@ -234,12 +225,14 @@
         document.getElementById('bought').innerHTML= bought_details;      
     }
 
+    // remove the former search result
     function removeDiv(){
       $('.flight-div1').remove();
       $('.col-sm-8').remove();
       console.log("d");
     }
 
+    // for the outbound or one way flight
     function createDiv() {
         
         removeDiv();
