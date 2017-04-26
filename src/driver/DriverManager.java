@@ -222,7 +222,7 @@ public class DriverManager {
 	public int buyTicket(String seatTypes, String flightNums) {
 		ServerInterface resSys = new ServerInterface();
 		String xmlFlights = flights2xml(flightNums, seatTypes);
-		if(flightNums.length()==0)return 2;
+		if(flightNums.length()==0)return 2;//2 nothing
 		boolean isLocked;
 		int buySuccess;
 		
@@ -231,6 +231,7 @@ public class DriverManager {
 		}while(!isLocked); // if DB is locked by teamName, then go to reserve tickets.
 		
 		buySuccess = resSys.buyTickets("TeamE", xmlFlights)?1:0;//2 nothing; 1 success; 0 fail
+		System.out.print(buySuccess);
 		resSys.unlock("TeamE");
 		return buySuccess;
 		
@@ -297,15 +298,15 @@ public class DriverManager {
 		return xmlFlights + "</Flights>";
 	}
 	
-	public boolean buyTicket(String xmlFlights, String teamName){
+	public boolean buyTicket(String xmlFlights){
 		ServerInterface resSys = new ServerInterface();
 		boolean isLocked;
 		boolean buySuccess;
 		do{
-			isLocked = resSys.lock(teamName);
+			isLocked = resSys.lock("TeamE");
 		}while(!isLocked);
-		buySuccess = resSys.buyTickets(teamName, xmlFlights);
-		resSys.unlock(teamName);
+		buySuccess = resSys.buyTickets("TeamE", xmlFlights);
+		resSys.unlock("TeamE");
 		return buySuccess;
 	}
 	

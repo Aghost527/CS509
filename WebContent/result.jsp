@@ -45,6 +45,9 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
+            <label class="navbar-brand color-white" onclick="window.location='index.jsp'">Back</label>
+        </div>
+        <div class="navbar-header">
             <label class="navbar-brand color-white" href="../">Sorting</label>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -106,7 +109,7 @@
     <%DriverManager driverManager=new DriverManager();%>
 
     // check buy Tickets
-    var check=<%=driverManager.buyTicket(request.getParameter("flightNums"),request.getParameter("seatTypes"))
+    var check=<%=driverManager.buyTicket(request.getParameter("seatTypes"),request.getParameter("flightNums"))
     %>
     if(check==0){
         alert("The filght you Select has been sold out")
@@ -129,8 +132,8 @@
     out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
     %>
     // data to back end;
-    var seatTypeList=""
-    var flightNumberList=""
+    var seatTypeList="";
+    var flightNumberList="";
     //tmp flights
      var ticketsList=[]
 
@@ -153,14 +156,43 @@
 
     }
 
-    function myForward() {
-      window.location='success.jsp?flight=123&date=456#';
-    }
 
     function buyTickets(i){
-
+      var url = createBuyURL();
+      window.location=url;
       
     }
+
+    function createBuyURL(){
+        var Request = new Object();
+        Request = GetRequest(); 
+        var result = 'result.jsp?customer_from='+Request["customer_from"]+
+                  '&customer_to='+Request["customer_to"]+
+                  '&customer_date='+Request["customer_date"]+
+                  '&customer_returndate='+Request["customer_returndate"]+
+                  // '&customer_search='+document.getElementsByName("customer_search")[0].value+
+                  '&customer_triptype='+Request["customer_triptype"]+
+                  '&customer_cabin='+Request["customer_cabin"]+
+                  '&customer_timetype='+Request["customer_timetype"]+
+                  '&customer_returntimetype='+Request["customer_returntimetype"]+
+                  '&seatTypes='+seatTypeList+
+                  '&flightNums='+flightNumberList+'#';
+
+        return result;
+    }
+
+    function GetRequest() {
+          var url = location.search; //获取url中"?"符后的字串
+          var theRequest = new Object();
+          if (url.indexOf("?") != -1) {
+          var str = url.substr(1);
+          strs = str.split("&");
+          for(var i = 0; i < strs.length; i ++) {
+          theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+          }
+          }
+          return theRequest;
+      }    
 
     //for one way confirmation
     function confirmation1(i){
