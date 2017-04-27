@@ -3,6 +3,7 @@ package ticket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import flight.Flight;
 import flight.Flights;
@@ -14,7 +15,7 @@ public class Ticketsort extends ArrayList<Tickets> {
 	}
 	
 	
-	public void sortByDepartureAirport(Tickets ticket){
+	public void sortByDepartureAirport(List<Tickets> ticket){
 //List<Ticket> ticket1 = new ArrayList<Ticket>();
 
 	Comparator<Tickets> comparator = new Comparator<Tickets>(){
@@ -22,11 +23,11 @@ public class Ticketsort extends ArrayList<Tickets> {
 		 return o1.getTotalPrice().compareTo(o2.getTotalPrice());
 			 }
 	 };
-    Collections.sort(this, comparator);
+    Collections.sort(ticket, comparator);
 	}
 	
 	
-	public void sortbyTotalPrice(Tickets ticket){
+	public void sortbyTotalPrice(List<Tickets> ticket){
 		 Comparator<Tickets> comparator = new Comparator<Tickets>(){
 			     public int compare(Tickets o1, Tickets o2) {
 		 double str1 = o1.getTotalPrice();
@@ -46,10 +47,10 @@ public class Ticketsort extends ArrayList<Tickets> {
          return str1 < str2? -1 : str1 == str2? 0 : 1;	
 	     }
 		 }; 
-		 Collections.sort(this, comparator);
+		 Collections.sort(ticket, comparator);
 	}
 
-	public void sortbyTotalFlightTime(Tickets ticket){
+	public void sortbyTotalFlightTime(List<Tickets> ticket){
 		 Comparator<Tickets> comparator = new Comparator<Tickets>(){
 			     public int compare(Tickets o1, Tickets o2) {
 		 int int1 = o1.getTotalFlightMinute();
@@ -57,11 +58,11 @@ public class Ticketsort extends ArrayList<Tickets> {
 		 return int1 < int2? -1 : int1 == int2? 0 : 1;	
 			     }
 				 }; 
-				 Collections.sort(this, comparator);
+				 Collections.sort(ticket, comparator);
 			}	     
 	
 	
-	public void sortbyDepartureTime(Tickets ticket){
+	public void sortbyDepartureTime(List<Tickets> ticket){
 		 Comparator<Tickets> comparator = new Comparator<Tickets>(){
 			     public int compare(Tickets o1, Tickets o2) {
 		 String str1 = o1.getDeTimeString().substring(5, 6);
@@ -108,10 +109,10 @@ public class Ticketsort extends ArrayList<Tickets> {
 		 
 			     }
 				 }; 
-				 Collections.sort(this, comparator);
+				 Collections.sort(ticket, comparator);
 			}	     
 
-	public void sortbyArrivalTime(Tickets ticket){
+	public void sortbyArrivalTime(List<Tickets> ticket){
 		 Comparator<Tickets> comparator = new Comparator<Tickets>(){
 			     public int compare(Tickets o1, Tickets o2) {
 		 String str1 = o1.getArTimeString().substring(5, 6);
@@ -159,7 +160,7 @@ public class Ticketsort extends ArrayList<Tickets> {
 		 
 			     }
 				 }; 
-				 Collections.sort(this, comparator);
+				 Collections.sort(ticket, comparator);
 			}	
 		
 

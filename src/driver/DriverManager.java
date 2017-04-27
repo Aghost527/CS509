@@ -381,6 +381,8 @@ public class DriverManager {
 
 		flightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
 		
+		
+		
 		//or generate one-way tickets
 		if(!seatType1.equals("Alternative")){
 			for (Flights f : flightlist) {
@@ -421,8 +423,8 @@ public class DriverManager {
 			}
 		}
 		else{
-			for (Flights f : flightlist) {
-				outboundlist.addAll(TicketController.noTicket(f));
+			for (Flights f2 : returnflightlist) {
+				returnlist.addAll(TicketController.noTicket(f2));
 			}
 		}
 			

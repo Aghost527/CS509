@@ -155,11 +155,11 @@
             //alert(document.getElementsByName("customer_date")[0].value)
       //      alert($("input[name='customer_date']").val()=="");
 
-            if((
+            if(
               //The return time should not be before the outbound time
-              $('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&
-              new Date(document.getElementsByName("customer_date")[0].value.replace(/-/g,"\/")).getTime()  >
-              new Date(document.getElementsByName("customer_returndate")[0].value.replace(/-/g,"\/")).getTime())) {
+              $('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&(
+              $("input[name='customer_date']").val()  >
+              $("input[name='customer_returndate']").val() )) {
                   //alert("The return time should not be before the outbound time");
                   toastr.warning("The return time should not be before the outbound time")
             }
