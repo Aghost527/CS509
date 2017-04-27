@@ -52,11 +52,22 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href=" " onClick="sortbyprice()" id="sortbyprice" name="sortbyprice">By Price</a ></li>
-            <li><a href="#" onClick="sortbyflighttime()" id="sortbyflighttime" name="sortbyflighttime">By Duration</a ></li>
-            <li><a href="#" onClick="sortbydeparturetime()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time</a ></li>
-            <li><a href="#" onClick="sortbyarrivaltime()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time</a ></li>
-            <li></li>
+                <li class="dropdown">
+              <a herf="#" class="dropdown-toggle" data-toggle="dropdown">
+                <b class="caret"></b>
+              </a >
+                <ul class="dropdown-menu">
+                <li><a href=" " onClick="sortbyprice1()" id="sortbyprice" name="sortbyprice">By Price(low to high)</a ></li>
+                <li><a href="#" onClick="sortbyprice2()" id="sortbyprice" name="sortbyprice">By Price(high to low)</a ></li>
+                <li><a href="#" onClick="sortbyflighttime1()" id="sortbyflighttime" name="sortbyflighttime">By Duration(short to long)</a ></li>
+                <li><a href="#" onClick="sortbyflighttime2()" id="sortbyflighttime" name="sortbyflighttime">By Duration(long to short)</a ></li>
+                <li><a href="#" onClick="sortbydeparturetime1()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(early to late)</a ></li>
+                <li><a href="#" onClick="sortbydeparturetime2()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(late to early)</a ></li>
+                <li><a href="#" onClick="sortbyarrivaltime1()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(early to late)</a ></li>
+                <li><a href="#" onClick="sortbyarrivaltime2()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(late to early)</a ></li>
+                <li></li>
+          </ul>
+          </li>
           </ul>
         </div>
       </div>
@@ -392,22 +403,69 @@
     jsonStr[0].sort(sortdeparturetime);
     createDiv();
      }
-        
-     function sortbyarrivaltime(){
-       function sortarrivaltime(a,b){
-         if(a.arTimeString > b.arTimeString){
-           return 1;
-         }
-         else if(a.arTimeString < b.arTimeString){
-           return -1;
-         }
-         else{
-           return a.totalPrice - b.totalPrice;
-         }
+              
+           function sortbyarrivaltime(){
+             function sortarrivaltime(a,b){
+               if(a.arTimeString > b.arTimeString){
+                 return 1;
+               }
+               else if(a.arTimeString < b.arTimeString){
+                 return -1;
+               }
+               else{
+                 return a.totalPrice - b.totalPrice;
+               }
+             }
+          jsonStr[0].sort(sortarrivaltime);
+          createDiv();
+           }
+           function sortbyprice2(){     
+         function sortprice (a,b){
+          return b.totalPrice - a.totalPrice; 
+        }  
+       jsonStr[0].sort(sortprice);
+       createDiv();
        }
-    jsonStr[0].sort(sortarrivaltime);
-    createDiv();
-     }
+          
+       function sortbyflighttime2(){
+         function sortflighttime(a,b){
+           return b.totalFlightMinute - a.totalFlightMinute;
+         }
+       jsonStr[0].sort(sortflighttime);
+       createDiv();
+       }
+       
+       function sortbydeparturetime2(){
+         function sortdeparturetime(a,b){
+           if(a.deTimeString > b.deTimeString){
+             return -1;
+           }
+           else if(a.deTimeString < b.deTimeString){
+             return 1;
+           }
+           else{
+             return a.totalPrice - b.totalPrice;
+           }
+         }
+      jsonStr[0].sort(sortdeparturetime);
+      createDiv();
+       }
+          
+       function sortbyarrivaltime2(){
+         function sortarrivaltime(a,b){
+           if(a.arTimeString > b.arTimeString){
+             return -1;
+           }
+           else if(a.arTimeString < b.arTimeString){
+             return 1;
+           }
+           else{
+             return a.totalPrice - b.totalPrice;
+           }
+         }
+      jsonStr[0].sort(sortarrivaltime);
+      createDiv();
+       }
 </script>
   </body>
 </html>

@@ -16,12 +16,11 @@
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="toastr/build/toastr.css" rel="stylesheet" type="text/css" />
     <!-- Custom styles for this template -->
-    <link href="signin.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -94,7 +93,7 @@
                     Coach
                   </label>
                   <label class="color-1">
-                    <input type="radio" name="customer_cabin" id="First-Class" value="FirstClass">
+                    <input type="radio" name="customer_cabin" id="FirstClass" value="FirstClass">
                     First-Class
                   </label>
                 </div>
@@ -108,7 +107,7 @@
                     <input type="radio" name="customer_timetype" id="Arrival" value="Arrival">
                     Arrival
                   </label>
-                  
+
               </div>
               <label  id="returntimetypelabel" class="col-sm-1 color-1" style="display:none">Time Type</label>
                 <div class="col-sm-2" id="returntimetypediv" style="display:none">
@@ -132,7 +131,7 @@
 
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
-    
+      var Airports = new Array("ATL","ANC","AUS","BWI","BOS","CLT","MDW","ORD","CVG","CLE","CMH","DFW","DEN","DTW","FLL","RSW","BDL","HNL","IAH","HOU","IND","MCI","LAS","LAX","MEM","MIA","MSP","BNA","MSY","JFK","LGA","EWR","OAK","ONT","MCO","PHL","PHX","PIT","PDX","RDU","SMF","SLC","SAT","SAN","SFO","SJC","SNA","SEA","STL","TPA","IAD","DCA");
       $(function() {
           $("#one-way").click(function() {
             document.getElementById("returntimetypediv").style.display="none"
@@ -153,37 +152,60 @@
       //data validation
       $(function() {
           $("#customer_search").click(function() {
+            //alert(document.getElementsByName("customer_date")[0].value)
+      //      alert($("input[name='customer_date']").val()=="");
+
             if((
               //The return time should not be before the outbound time
               $('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&
-              new Date(document.getElementsByName("customer_date")[0].value.replace(/-/g,"\/")).getTime()  > 
+              new Date(document.getElementsByName("customer_date")[0].value.replace(/-/g,"\/")).getTime()  >
               new Date(document.getElementsByName("customer_returndate")[0].value.replace(/-/g,"\/")).getTime())) {
-                  alert("The return time should not be before the outbound time");
+                  //alert("The return time should not be before the outbound time");
+                  toastr.warning("The return time should not be before the outbound time")
+            }
+            else if ($("input[name='customer_date']").val()=="") {
+              toastr.warning("Date cannot be empty")
+            }
+            else if ($("input[name='customer_triptype']:checked").val()=="Roundtrip"&&$("input[name='customer_returndate']").val()=="") {
+              toastr.warning("Date cannot be empty!!!")
             }
             //Departure city and Arrival city cannot be the same
-            else if(document.getElementsByName("customer_from")[0].value==document.getElementsByName("customer_to")[0].value){
-                  alert("Departure city and Arrival city cannot be the same");
-            }
-            //Departure city or Arrival city cannot be empty
             else if(document.getElementsByName("customer_from")[0].value==""||
               document.getElementsByName("customer_to")[0].value==""){
-                  alert("Departure city or Arrival city cannot be empty");
-            }            
+                  //alert("Departure city or Arrival city cannot be empty");
+                  toastr.warning("Departure city or Arrival city cannot be empty")
+
+            }
+            else if (document.getElementsByName("customer_from")[0].value==document.getElementsByName("customer_to")[0].value){
+                //  alert("Departure city and Arrival city cannot be the same");
+                  toastr.warning("Departure city and Arrival city cannot be the same")
+            }
+            else if (Airports.includes($("input[name='customer_from']").val().toUpperCase()) == false || Airports.includes($("input[name='customer_to']").val().toUpperCase()) == false) {
+              toastr.warning("Please enter valid airport name");
+            }
             else{
-                window.location='result.jsp?customer_from='+document.getElementsByName("customer_from")[0].value+
-                  '&customer_to='+document.getElementsByName("customer_to")[0].value+
+              var seatStr=$('input:radio[name="customer_cabin"]:checked').val();
+              // if($('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"){
+              //     seatStr+="-"+$('input:radio[name="customer_cabin"]:checked').val();
+              // }
+                window.location='result.jsp?customer_from='+$("input[name='customer_from']").val().toUpperCase()+
+                  '&customer_to='+$("input[name='customer_to']").val().toUpperCase()+
                   '&customer_date='+document.getElementsByName("customer_date")[0].value+
                   '&customer_returndate='+document.getElementsByName("customer_returndate")[0].value+
                   // '&customer_search='+document.getElementsByName("customer_search")[0].value+
                   '&customer_triptype='+$('input:radio[name="customer_triptype"]:checked').val()+
-                  '&customer_cabin='+$("input[name='customer_cabin']:checked").val()+
+                  '&customer_cabin='+seatStr+
                   '&customer_timetype='+$('input:radio[name="customer_timetype"]:checked').val()+
                   '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val()+
-                  '&seatTypes=&flightNums=';
+                  "&seatTypes=&flightNums=";
              }
           });
       });
 
+    </script>
+    <script src="toastr/toastr.js"></script>
+    <script type="text/javascript">
+      toastr.options.positionClass = 'toast-bottom-left';
     </script>
   </body>
 </html>
