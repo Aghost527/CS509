@@ -51,15 +51,15 @@ public class Driver extends HttpServlet  {
 //		}
 
 		
-		JSONArray jsonArray=new DriverManager().search("Roundtrip", "Coach", "SFO", "2017_05_12", "ORD",  "Departure", "2017_05_14", "Arrival");
+//		JSONArray jsonArray=new DriverManager().search("Roundtrip", "Coach", "SFO", "2017_05_12", "ORD",  "Departure", "2017_05_14", "Arrival");
 		
-		// Try to get a list of airplanes
-//	ServerInterface resSys=new ServerInterface();
-//	Map<String, Airplane> airplanes = resSys.getAirplanes(teamName);
-//	for (String model : airplanes.keySet()) {
-////		System.out.println(airport.toString());
-//		System.out.println(airplanes.get(model).toString());
-//	}
+//		 Try to get a list of airplanes
+	ServerInterface resSys=new ServerInterface();
+	Map<String, Airplane> airplanes = resSys.getAirplanes(teamName);
+	for (String model : airplanes.keySet()) {
+//		System.out.println(airport.toString());
+		System.out.println(airplanes.get(model).toString());
+	}
 //		
 //
 //		
@@ -95,7 +95,7 @@ public class Driver extends HttpServlet  {
 //		
 //
 //        JSONArray jsonArray = JSONArray.fromObject( flightlis );  
-        System.out.println( jsonArray );  
+//        System.out.println( jsonArray );  
 //        
 		System.out.println("finished");
 //		System.out.println("result size:"+flightlis.size());

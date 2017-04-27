@@ -368,7 +368,7 @@ public class DriverManager {
 				? "2017_05_11" : returndate;
 		departure = departure.equals("") | departure.equals(null) | departure.equals("null") | departure == null ? "BOS"
 				: departure;
-		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Coach"
+		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Alternative"
 				: seatType;
 		
 		//create airplane map
@@ -382,13 +382,19 @@ public class DriverManager {
 		flightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
 		
 		//or generate one-way tickets
+		if(!seatType.equals("Alternative")){
 			for (Flights f : flightlist) {
 				if (TicketController.validateFlights(f, seatType)) {
 					outboundlist.add(new Tickets(f, seatType));
 				}
 			}
 			System.out.println("outboundlist len:"+outboundlist.size());
-		
+		}
+		else{
+			for (Flights f : flightlist) {
+				outboundlist.addAll(TicketController.noTicket(f));
+			}
+		}
 //		sorter.sortbyDepartureTime(outboundlist);
 			
 		result.add(outboundlist);
@@ -406,11 +412,18 @@ public class DriverManager {
 			returnflightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
 			
 		//return should be later than outbound
-		for (Flights f2 : returnflightlist) {
-			if (!TicketController.validateFlights(f2, seatType)){
-				continue;
+		if(!seatType.equals("Alternative")){
+			for (Flights f2 : returnflightlist) {
+				if (!TicketController.validateFlights(f2, seatType)){
+					continue;
+				}
+				returnlist.add(new Tickets(f2, seatType));
 			}
-			returnlist.add(new Tickets(f2, seatType));
+		}
+		else{
+			for (Flights f : flightlist) {
+				outboundlist.addAll(TicketController.noTicket(f));
+			}
 		}
 			
 			
@@ -420,7 +433,7 @@ public class DriverManager {
 	
 		
 		jsonArray=JSONArray.fromObject(result);
-//		 System.out.println("json: "+jsonArray);
+		 System.out.println("json: "+jsonArray);
 		return jsonArray;
 
 	}

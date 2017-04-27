@@ -49,16 +49,18 @@ public class TicketController {
 			for(Flight f:flist){
 				if((types&1)==1){
 					if(f.getSeating().getFirstClassRemaining()<1)break;
+					System.out.println(f.getSeating().getFirstClassRemaining()+"first; "+f.getDeparture()+" 2 "+f.getArrival()+" num: "+f.getNumber() );
 					seatType = "First-Class";
-					String tprice=f.getSeating().getFirstClassPrice().replace(",", "");
+					String tprice=f.getSeating().getFirstClassPrice().replace(",", "").replace("$", "");
 					price+=Double.valueOf(tprice.replace(",","").replace("$",""));
 					tlist.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), seatType, tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 	
 				}
 				else{
 					if(f.getSeating().getCoachRemaining()<1)break;
+					System.out.println(f.getSeating().getCoachRemaining()+"coach"+f.getDeparture()+" 2 "+f.getArrival()+" num: "+f.getNumber()  );
 					seatType = "Coach";
-					String tprice=f.getSeating().getCoachPrice().replace(",", "");
+					String tprice=f.getSeating().getCoachPrice().replace(",", "").replace("$", "");
 					price+=Double.valueOf(tprice.replace(",","").replace("$",""));
 					tlist.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), seatType, tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 

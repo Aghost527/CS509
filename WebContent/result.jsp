@@ -200,6 +200,9 @@
     function confirmation1(i){
         flightNumberList=jsonStr[0][i].flightNumbers
         seatTypeList=jsonStr[0][i].seatTypes
+        console.log(flightNumberList)
+        console.log(seatTypeList)
+        
         if(<%out.print(request.getParameter("customer_triptype").equals("Roundtrip"));%>)
         {   
             $('#successmodal' + i ).modal('hide')
@@ -263,7 +266,7 @@
             
 
 
-            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' +
+            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + "  "+ currentTickets.ticketList[j].seatType + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' +
             currentTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + currentTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
 
             forward_List += "flight" + j + '=' + currentTickets.ticketList[j].number + '&' + 'seatType' + j + '=' + currentTickets.ticketList[j].seatType;
@@ -328,7 +331,7 @@
             
 
 
-            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' + currentTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + currentTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
+            detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + "  "+ currentTickets.ticketList[j].seatType + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' + currentTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + currentTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
 
             forward_List += "flight" + j + '=' + currentTickets.ticketList[j].number + '&' + 'seatType' + j + '=' + currentTickets.ticketList[j].seatType;
             if (j != currentTickets.ticketList.length - 1) {

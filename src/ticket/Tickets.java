@@ -50,14 +50,13 @@ public class Tickets  {
 	public Tickets(List<Ticket> ticketList, String totalFlightTime , int totalFlightMinute) {
 	
 		this.ticketList = ticketList;
-		
+		this.totalPrice=0.0;
 //		long diff = (ticketList.get(ticketList.size()-1).getArrivalTime().getTime() - ticketList.get(0).getDepartureTime().getTime()) / 60000;
 		
 //		this.totalPrice = totalPrice;
 //		this.totalFlightTime = totalFlightTime;
 		for(Ticket t:ticketList){
-			System.out.println(t.getPrice());
-			this.totalPrice+=Double.parseDouble(t.getPrice().replace(",","").replace("$",""));
+			this.totalPrice+=Double.parseDouble(t.getPrice());
 			this.flightNumbers+=t.getNumber()+",";
 			this.seatTypes+=t.getSeatType()+",";
 		}
