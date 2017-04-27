@@ -43,7 +43,7 @@
     .navbar-inverse .navbar-nav .open .dropdown-menu> li> a,
     .navbar-inverse .navbar-nav .open .dropdown-menu {
         background-color: #fff;
-        color:#fff;
+        color:#333;
     }
     .navbar-inverse .navbar-nav .open .dropdown-menu> li> a:hover {
         color:#333;
@@ -60,7 +60,7 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
                 <li class="dropdown">
-              <a herf="#" class="dropdown-toggle" data-toggle="dropdown">
+              <a  class="dropdown-toggle" data-toggle="dropdown">
                 Sorting by <span class="caret"></span>
               </a >
                 <ul class="dropdown-menu">
