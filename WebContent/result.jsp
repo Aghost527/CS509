@@ -139,7 +139,7 @@
         </div>
       </div>
 -->
-      <div id="panelModal" class="panel panel-success" style="position: fixed; top: 380px; right: 30px; opacity: 1; z-index:3;width:470px;display:none ">
+      <div id="panelModal" class="panel panel-success" style="position: fixed; bottom: 30px; right: 30px; opacity: 1; z-index:3;width:470px;display:none ">
       <div class="panel-heading">Outbound Tickets</div>
         <div id="bought" class="panel-body">
 
@@ -350,8 +350,8 @@
             $(".modal-backdrop").remove();
             
             if(!createDiv2(i)){
-              toastr.info("There is no tickets to return if you buy this one")
-              alert("There is no tickets to return if you buy this one")
+              toastr.info("There are no tickets to return if you buy this one")
+              alert("There are no tickets to return if you buy this one. So it is only for viewing.")
             };
 
         }
@@ -423,7 +423,7 @@
           forward_List += '#';
 
 
-          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button>          <div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary" onClick="confirmation1('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
+          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button>          <div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div>'+detail_txt+'</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary" onClick="confirmation1('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
 
 
 
@@ -490,7 +490,7 @@
 
 
 
-          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onClick="confirmation2('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
+          select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div>'+detail_txt+'</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onClick="confirmation2('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
 
 
 
