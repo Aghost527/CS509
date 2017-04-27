@@ -348,7 +348,7 @@
         {
             $('#successmodal' + i ).modal('hide')
             $(".modal-backdrop").remove();
-            now=1;
+            
             if(!createDiv2(i)){
               toastr.info("There is no tickets to return if you buy this one")
               alert("There is no tickets to return if you buy this one")
@@ -449,7 +449,7 @@
         ticketsList=[];
         var outTime=now==0?new Date(jsonStr[0][num].arTimeString).getTime():0;
         if(now==0)showBoughtTickets(num);
-
+        console.log("show bought tickets"+now)
         //change state now
         now=1;
         var returnticketsList=jsonStr[now];
