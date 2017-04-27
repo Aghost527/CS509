@@ -494,7 +494,7 @@
 
 
 
-      function sortbyprice(){
+      function sortbyprice1(){
        function sortprice (a,b){
         return a.totalPrice - b.totalPrice;
       }
@@ -502,7 +502,7 @@
      createDiv();
      }
 
-     function sortbyflighttime(){
+     function sortbyflighttime1(){
        function sortflighttime(a,b){
          return a.totalFlightMinute - b.totalFlightMinute;
        }
@@ -510,7 +510,7 @@
      createDiv();
      }
 
-     function sortbydeparturetime(){
+     function sortbydeparturetime1(){
        function sortdeparturetime(a,b){
          if(a.deTimeString > b.deTimeString){
            return 1;
@@ -526,7 +526,7 @@
     createDiv();
      }
 
-           function sortbyarrivaltime(){
+           function sortbyarrivaltime1(){
              function sortarrivaltime(a,b){
                if(a.arTimeString > b.arTimeString){
                  return 1;
