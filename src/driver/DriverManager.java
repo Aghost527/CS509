@@ -220,11 +220,9 @@ public class DriverManager {
 	}
 	
 	public int buyTicket(String seatTypes, String flightNums) {
-		if(flightNums.length()==0)return 2;//2 nothing
-		 
 		ServerInterface resSys = new ServerInterface();
 		String xmlFlights = flights2xml(flightNums, seatTypes);
-		if(xmlFlights.equals(""))return 0;
+		if(flightNums.length()==0)return 2;//2 nothing
 		boolean isLocked;
 		int buySuccess;
 		
@@ -332,7 +330,7 @@ public class DriverManager {
 	public String flights2xml(String flightNums, String seatTypes) {
 		String[] fs=flightNums.split(",");
 		String[] ss=seatTypes.split(",");
-		if(fs.length!=ss.length)return "";
+		
 		String res = "<Flights>";
 		for (int i=0;i<fs.length;i++) {
 			res += "<Flight number=" + "\"" +fs[i]+"\"" + " seating=" + "\""+ss[i]+"\"" + "/>";

@@ -136,14 +136,7 @@
 
     // check whether the result is empty, if the seatType is  , it means the result contains all possible seat types
     function checkResult(){
-        if(jsonStr[0].length==0)
-        {
-          // var Request = new Object();
-          // Request = GetRequest();
-          // if(request["customer_cabin"]=="alter")
-          // alert()
-          // else
-        }
+
     }
 
     function toggleDetails(obj) {
