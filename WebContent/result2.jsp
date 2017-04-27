@@ -42,6 +42,7 @@
     </style>
 
   <body>
+    <div id="resultbuffer">0</div> 
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -84,8 +85,25 @@
         <div class="div5 border">
           <p>Stops</p>
         </div>
-
     </div>
+
+    <div id="SeatModal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Uoops</h4>
+          </div>
+          <div class="modal-body">
+            <p id="SeatContent"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary" onClick="alternative()" data-dismiss="modal">Yes</button>
+          </div>
+       </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <div class="container border">
       <div class="border" style="min-height: 100px">
@@ -93,9 +111,9 @@
       </div>
       <div class="root-content border" id="root" style="height:600px;width:1143 px;overflow:auto;overflow-x:hidden;margin-top:0px;">
         <div class="col-sm-8 padding-div" >
-           
+
         </div>
-      </div>  
+      </div>
 
         <!--add here -->
     <!--    <button type="button" value="golist" onClick="window.location='index.jsp';">abcdefg</button>  -->
@@ -104,13 +122,13 @@
           <p style="padding:8px;"></p>
         </div>
       </div>
+    </div>
 
 
-      
       <!-- bought tickets -->
       <div id="topcontrol" style="position: fixed; top: 80px; right: 30px; opacity: 1; z-index:3;width:400px; " title="Outbound Tickets">
         <div id="bought">
-            
+
         </div>
       </div>
 
@@ -123,18 +141,23 @@
     // check buy Tickets
     var check=<%=driverManager.buyTicket(request.getParameter("seatTypes"),request.getParameter("flightNums"))
     %>
+    document.getElementById("resultbuffer").value=0;
     if(check==0){
+        document.getElementById("resultbuffer").value=7;
         alert("The filght you Select has been sold out")
     }
     else if(check==1){
         alert("Reservation success")
+        window.location="index.jsp";
     }
     // data from back end
     var jsonStr=    	<%
      out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"),request.getParameter("customer_returncabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
     %>
 
-    var result=checkResult();
+    var result=0;
+    result=checkResult();
+    document.getElementById("resultbuffer").value=result;
      //good
       if(result==0){
 
@@ -142,17 +165,34 @@
 
       //no outbound
       else if(result==1){
-          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip" );
+        //  alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip" );
+          $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip. Would you search for the alternative cabins?");
+          $("#SeatModal").modal();
       }
       //no return
       else if(result==2){
-          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip" );
+      //    alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip" );
+          $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip. Would you search for the alternative cabins?" );
+          $("#SeatModal").modal();
       }
       //no outbound and return
       else if(result==3){
-          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip" );
+        //  alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip" );
+          $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip. Would you search for the alternative cabins?");
+          $("#SeatModal").modal();
       }
-    
+      else if(result==4){
+         $("#SeatContent").after("There are no any seats in both the outbound trip. Click yes would jump to the welcome page.");
+          $("#SeatModal").modal();
+      }
+      else if(result==5){
+         $("#SeatContent").after("There are no any seats in both the return trip. Click yes would jump to the welcome page.");
+          $("#SeatModal").modal();
+      }
+       else if(result==6){
+         $("#SeatContent").after("There are no any seats in both the outbound trip and return trip. Click yes would jump to the welcome page.");
+          $("#SeatModal").modal();
+      }
 
     // data to back end;
     var seatTypeList="";
@@ -164,11 +204,23 @@
     $(document).ready(function(){
 
         createDiv();
-      
+
     });
 
     // check whether the result is empty, if the seatType is  , it means the result should contain all possible seat types
     function checkResult(){
+      var Request = new Object();
+        Request = GetRequest();
+        var flag=0;
+        for(i=0;i<jsonStr.length;i++){
+        if(jsonStr[i].length==0){
+            flag+=1+i;
+        }
+      }
+        if(flag!=0){
+        if(Request["customer_cabin"]=="Alternative"&&Request["customer_returncabin"]=="Alternative") return 6;
+        if(Request["customer_cabin"]=="Alternative") return 4;
+       if(Request["customer_returncabin"]=="Alternative") return 5;}
       var i=0;
       var result=0;
       for(i=0;i<jsonStr.length;i++){
@@ -176,7 +228,6 @@
             result+=1+i;
         }
       }
-      console.log(result)
       return result;
      }
 
@@ -196,31 +247,52 @@
     function buyTickets(i){
       var url = createBuyURL();
       window.location=url;
-      
+
     }
 
-    function createAlternativeURL(seattype1,seattype2){
+    function alternative(){
+        console.log("into "+result);
+        result=document.getElementById("resultbuffer").value;
+        console.log("into "+result);
         var Request = new Object();
-        Request = GetRequest(); 
+        Request = GetRequest();
+        var seat1=Request["customer_cabin"];
+        var seat2=Request["customer_returncabin"];
+        if(result==1){
+            seat1="Alternative";
+        }
+        else if(result==2){
+            seat2="Alternative";
+        }
+        else if(result==3){
+            seat1="Alternative";
+            seat2="Alternative";
+        }
+        else if(result==0){
+            return;
+        }
+        else if(result==4|result==5|result==6){
+            window.location="index.jsp";
+        }
         var result = 'result.jsp?customer_from='+Request["customer_from"]+
                   '&customer_to='+Request["customer_to"]+
                   '&customer_date='+Request["customer_date"]+
                   '&customer_returndate='+Request["customer_returndate"]+
                   // '&customer_search='+document.getElementsByName("customer_search")[0].value+
                   '&customer_triptype='+Request["customer_triptype"]+
-                  '&customer_cabin='+seattype1+
-                  '&customer_returncabin='+seattype2+
+                  '&customer_cabin='+seat1+
+                  '&customer_returncabin='+seat2+
                   '&customer_timetype='+Request["customer_timetype"]+
                   '&customer_returntimetype='+Request["customer_returntimetype"]+
                   '&seatTypes='+seatTypeList+
                   '&flightNums='+flightNumberList+'#';
 
-        return result;
+        window.location=result;
     }
 
     function createBuyURL(){
         var Request = new Object();
-        Request = GetRequest(); 
+        Request = GetRequest();
         var result = 'result.jsp?customer_from='+Request["customer_from"]+
                   '&customer_to='+Request["customer_to"]+
                   '&customer_date='+Request["customer_date"]+
@@ -248,24 +320,25 @@
           }
           }
           return theRequest;
-      }    
+      }
 
     //for one way confirmation
     function confirmation1(i){
         console.log(i)
+        now=0;
         flightNumberList=jsonStr[now][i].flightNumbers;
         seatTypeList=jsonStr[now][i].seatTypes;
         console.log(flightNumberList)
         console.log(seatTypeList)
-        
-        if(<%=request.getParameter("customer_triptype").equals("Roundtrip")%>)
-        {   
+
+        if(<%out.print(request.getParameter("customer_triptype").equals("Roundtrip"));%>)
+        {
             $('#successmodal' + i ).modal('hide')
             $(".modal-backdrop").remove();
             now=1;
             if(!createDiv2(i)){
               alert("There is no tickets to return if you buy this one")
-            };  
+            };
 
         }
         else{
@@ -277,11 +350,11 @@
     //for round way confirmation
     function confirmation2(i){
         if(true){
-     
+
           flightNumberList+= ticketsList[i].flightNumbers;
           seatTypeList+=ticketsList[i].seatTypes;
-         
-          buyTickets();       
+
+          buyTickets();
         }
     }
 
@@ -290,7 +363,7 @@
         for (var j = 0; j < jsonStr[0][num].ticketList.length; j++) {
         bought_details+='<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[0][num].ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[0][num].ticketList[j].departure + ' ' + jsonStr[0][num].ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[0][num].ticketList[j].arrival + ' ' + jsonStr[0][num].ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + jsonStr[0][num].ticketList[j].flightTime + 'minutes' + '</p></div></div>';
          }
-        document.getElementById('bought').innerHTML= bought_details;      
+        document.getElementById('bought').innerHTML= bought_details;
     }
 
     // remove the former search result
@@ -302,7 +375,7 @@
 
     // for the outbound or one way flight
     function createDiv() {
-        
+
         removeDiv();
         var root = document.getElementById('root');
         // document.getElementBy
@@ -321,7 +394,7 @@
           currentTickets=ticketsList[i];
 
           for (var j = 0; j < currentTickets.ticketList.length; j++) {
-            
+
 
 
             detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + "  "+ currentTickets.ticketList[j].seatType + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' +
@@ -350,7 +423,7 @@
 
     //for return flights
    function createDiv2(num) {
-        
+
         now=1;
         var root = document.getElementById('root');
 
@@ -358,11 +431,11 @@
 
 
         //return tickets
-        var returnticketsList=jsonStr[1];
+        var returnticketsList=jsonStr[now];
         ticketsList=[];
         var outTime=new Date(jsonStr[0][num].arTimeString).getTime();
 
-       
+
         for (var i = 0; i < returnticketsList.length; i++) {
             if(new Date(returnticketsList[i].deTimeString).getTime()>outTime)
               {ticketsList.push(returnticketsList[i])}
@@ -386,7 +459,7 @@
           var currentTickets=ticketsList[i];
 
           for (var j = 0; j < currentTickets.ticketList.length; j++) {
-            
+
 
 
             detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + "  "+ currentTickets.ticketList[j].seatType + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' + currentTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + currentTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
@@ -421,23 +494,23 @@
 
 
 
-      function sortbyprice(){    
+      function sortbyprice1(){
        function sortprice (a,b){
-        return a.totalPrice - b.totalPrice; 
-      }  
-     jsonStr[0].sort(sortprice);
+        return a.totalPrice - b.totalPrice;
+      }
+     jsonStr[now].sort(sortprice);
      createDiv();
      }
-        
-     function sortbyflighttime(){
+
+     function sortbyflighttime1(){
        function sortflighttime(a,b){
          return a.totalFlightMinute - b.totalFlightMinute;
        }
-     jsonStr[0].sort(sortflighttime);
+     jsonStr[now].sort(sortflighttime);
      createDiv();
      }
-     
-     function sortbydeparturetime(){
+
+     function sortbydeparturetime1(){
        function sortdeparturetime(a,b){
          if(a.deTimeString > b.deTimeString){
            return 1;
@@ -449,11 +522,11 @@
            return a.totalPrice - b.totalPrice;
          }
        }
-    jsonStr[0].sort(sortdeparturetime);
+    jsonStr[now].sort(sortdeparturetime);
     createDiv();
      }
-              
-           function sortbyarrivaltime(){
+
+           function sortbyarrivaltime1(){
              function sortarrivaltime(a,b){
                if(a.arTimeString > b.arTimeString){
                  return 1;
@@ -465,25 +538,25 @@
                  return a.totalPrice - b.totalPrice;
                }
              }
-          jsonStr[0].sort(sortarrivaltime);
+          jsonStr[now].sort(sortarrivaltime);
           createDiv();
            }
-           function sortbyprice2(){     
+           function sortbyprice2(){
          function sortprice (a,b){
-          return b.totalPrice - a.totalPrice; 
-        }  
-       jsonStr[0].sort(sortprice);
+          return b.totalPrice - a.totalPrice;
+        }
+       jsonStr[now].sort(sortprice);
        createDiv();
        }
-          
+
        function sortbyflighttime2(){
          function sortflighttime(a,b){
            return b.totalFlightMinute - a.totalFlightMinute;
          }
-       jsonStr[0].sort(sortflighttime);
+       jsonStr[now].sort(sortflighttime);
        createDiv();
        }
-       
+
        function sortbydeparturetime2(){
          function sortdeparturetime(a,b){
            if(a.deTimeString > b.deTimeString){
@@ -496,10 +569,10 @@
              return a.totalPrice - b.totalPrice;
            }
          }
-      jsonStr[0].sort(sortdeparturetime);
+      jsonStr[now].sort(sortdeparturetime);
       createDiv();
        }
-          
+
        function sortbyarrivaltime2(){
          function sortarrivaltime(a,b){
            if(a.arTimeString > b.arTimeString){
@@ -512,7 +585,7 @@
              return a.totalPrice - b.totalPrice;
            }
          }
-      jsonStr[0].sort(sortarrivaltime);
+      jsonStr[now].sort(sortarrivaltime);
       createDiv();
        }
 </script>

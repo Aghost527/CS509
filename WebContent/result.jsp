@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/bootstrap-social.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/result.css">
+    <link href="toastr/build/toastr.css" rel="stylesheet" type="text/css" />
     <!-- Custom styles for this template -->
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -35,37 +36,42 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="toastr/toastr.js"></script>
 
   </head>
     <style type="text/css">
-
+    .navbar-inverse .navbar-nav .open .dropdown-menu> li> a,
+    .navbar-inverse .navbar-nav .open .dropdown-menu {
+        background-color: #fff;
+        color:#fff;
+    }
+    .navbar-inverse .navbar-nav .open .dropdown-menu> li> a:hover {
+        color:#333;
+    }
     </style>
 
   <body>
-    <div id="resultbuffer">0</div> 
+    <div id="resultbuffer">0</div>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-            <label class="navbar-brand color-white" onclick="window.location='index.jsp'">Back</label>
-        </div>
-        <div class="navbar-header">
-            <label class="navbar-brand color-white" href="../">Sorting</label>
+            <label class="navbar-brand color-white" onclick="window.location='index.jsp'">Home</label>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
                 <li class="dropdown">
               <a herf="#" class="dropdown-toggle" data-toggle="dropdown">
-                <b class="caret"></b>
+                Sorting by <span class="caret"></span>
               </a >
                 <ul class="dropdown-menu">
-                <li><a href=" " onClick="sortbyprice1()" id="sortbyprice" name="sortbyprice">By Price(low to high)</a ></li>
-                <li><a href="#" onClick="sortbyprice2()" id="sortbyprice" name="sortbyprice">By Price(high to low)</a ></li>
-                <li><a href="#" onClick="sortbyflighttime1()" id="sortbyflighttime" name="sortbyflighttime">By Duration(short to long)</a ></li>
-                <li><a href="#" onClick="sortbyflighttime2()" id="sortbyflighttime" name="sortbyflighttime">By Duration(long to short)</a ></li>
-                <li><a href="#" onClick="sortbydeparturetime1()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(early to late)</a ></li>
-                <li><a href="#" onClick="sortbydeparturetime2()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(late to early)</a ></li>
-                <li><a href="#" onClick="sortbyarrivaltime1()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(early to late)</a ></li>
-                <li><a href="#" onClick="sortbyarrivaltime2()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(late to early)</a ></li>
+                <li><a onClick="sortbyprice1()" id="sortbyprice" name="sortbyprice">By Price(low to high)</a ></li>
+                <li><a onClick="sortbyprice2()" id="sortbyprice" name="sortbyprice">By Price(high to low)</a ></li>
+                <li><a onClick="sortbyflighttime1()" id="sortbyflighttime" name="sortbyflighttime">By Duration(short to long)</a ></li>
+                <li><a onClick="sortbyflighttime2()" id="sortbyflighttime" name="sortbyflighttime">By Duration(long to short)</a ></li>
+                <li><a onClick="sortbydeparturetime1()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(early to late)</a ></li>
+                <li><a onClick="sortbydeparturetime2()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time(late to early)</a ></li>
+                <li><a  onClick="sortbyarrivaltime1()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(early to late)</a ></li>
+                <li><a  onClick="sortbyarrivaltime2()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time(late to early)</a ></li>
                 <li></li>
           </ul>
           </li>
@@ -109,7 +115,7 @@
       <div class="border" style="min-height: 100px">
         <p style="padding:6px min-height: 0px"></p>
       </div>
-      <div class="root-content border" id="root" style="height:600px;width:1143 px;overflow:auto;overflow-x:hidden;margin-top:0px;">
+      <div class="root-content border" id="root" style="height:600px;width:1218px;overflow:auto;overflow-x:hidden;margin-top:0px;">
         <div class="col-sm-8 padding-div" >
 
         </div>
@@ -118,7 +124,7 @@
         <!--add here -->
     <!--    <button type="button" value="golist" onClick="window.location='index.jsp';">abcdefg</button>  -->
       <div class="row ">
-        <div class="col-sm-8" style="border-bottom:2px ridge #999900;">
+        <div class="col-sm-7" style="border-bottom:2px ridge #999900;">
           <p style="padding:8px;"></p>
         </div>
       </div>
@@ -126,11 +132,19 @@
 
 
       <!-- bought tickets -->
+  <!--
       <div id="topcontrol" style="position: fixed; top: 80px; right: 30px; opacity: 1; z-index:3;width:400px; " title="Outbound Tickets">
         <div id="bought">
 
         </div>
       </div>
+-->
+      <div id="panelModal" class="panel panel-success" style="position: fixed; top: 380px; right: 30px; opacity: 1; z-index:3;width:470px;display:none ">
+      <div class="panel-heading">Outbound Tickets</div>
+        <div id="bought" class="panel-body">
+
+        </div>
+</div>
 
 
 
@@ -144,10 +158,12 @@
     document.getElementById("resultbuffer").value=0;
     if(check==0){
         document.getElementById("resultbuffer").value=7;
+        toastr.info("The filght you Select has been sold out")
         alert("The filght you Select has been sold out")
     }
     else if(check==1){
-        alert("Reservation success")
+        toastr.success("Reservation success")
+        alert("Reservatin Success")
         window.location="index.jsp";
     }
     // data from back end
@@ -165,19 +181,16 @@
 
       //no outbound
       else if(result==1){
-        //  alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip" );
           $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip. Would you search for the alternative cabins?");
           $("#SeatModal").modal();
       }
       //no return
       else if(result==2){
-      //    alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip" );
           $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip. Would you search for the alternative cabins?" );
           $("#SeatModal").modal();
       }
       //no outbound and return
       else if(result==3){
-        //  alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip" );
           $("#SeatContent").after("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip. Would you search for the alternative cabins?");
           $("#SeatModal").modal();
       }
@@ -337,6 +350,7 @@
             $(".modal-backdrop").remove();
             now=1;
             if(!createDiv2(i)){
+              toastr.info("There is no tickets to return if you buy this one")
               alert("There is no tickets to return if you buy this one")
             };
 
@@ -359,9 +373,10 @@
     }
 
     function showBoughtTickets(num){
+        document.getElementById('panelModal').style.display = 'inline';
         var bought_details="";
         for (var j = 0; j < jsonStr[0][num].ticketList.length; j++) {
-        bought_details+='<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + jsonStr[0][num].ticketList[j].number + '</p>' + '</div><div class="col-sm-3"><p>departs ' + jsonStr[0][num].ticketList[j].departure + ' ' + jsonStr[0][num].ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + jsonStr[0][num].ticketList[j].arrival + ' ' + jsonStr[0][num].ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + jsonStr[0][num].ticketList[j].flightTime + 'minutes' + '</p></div></div>';
+        bought_details+='<div class="col-sm-12"><div class="col-sm-3">Flight Number ' + jsonStr[0][num].ticketList[j].number + '' + '</div><div class="col-sm-3">departs ' + jsonStr[0][num].ticketList[j].departure + ' ' + jsonStr[0][num].ticketList[j].deTimeString + '</div><div class="col-sm-3">arrives ' + jsonStr[0][num].ticketList[j].arrival + ' ' + jsonStr[0][num].ticketList[j].arTimeString + '</div><div class="col-sm-3">' + jsonStr[0][num].ticketList[j].flightTime + 'minutes' + '</div></div>';
          }
         document.getElementById('bought').innerHTML= bought_details;
     }
@@ -369,7 +384,7 @@
     // remove the former search result
     function removeDiv(){
       $('.flight-div1').remove();
-      $('.col-sm-8').remove();
+      $('.col-sm-7').remove();
       console.log("d");
     }
 
@@ -406,17 +421,16 @@
             }
           }
           forward_List += '#';
-          //alert(forward_List);
 
 
           select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button>          <div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary" onClick="confirmation1('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
 
 
 
-          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-8 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
+          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
           '<p>' + currentTickets.ticketList[0].departure + ' ' + currentTickets.deTimeString.split(" ")[1] +  ' - <br>' + currentTickets.ticketList[currentTickets.ticketList.length-1].arrival + ' ' + currentTickets.arTimeString.split(" ")[1] + '</p>'
           + '</div><div class="col-sm-4"><p>' + currentTickets.totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (currentTickets.ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + currentTickets.totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onClick="toggleDetails(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + "detail" + i + "_content" + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
-          + '</div></div>' + '<div class="row "><div class="col-sm-8" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
+          + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
         }
     }
 
@@ -424,18 +438,21 @@
     //for return flights
    function createDiv2(num) {
 
-        now=1;
+        
         var root = document.getElementById('root');
 
 
 
 
         //return tickets
-        var returnticketsList=jsonStr[now];
+
         ticketsList=[];
-        var outTime=new Date(jsonStr[0][num].arTimeString).getTime();
+        var outTime=now==0?new Date(jsonStr[0][num].arTimeString).getTime():0;
+        if(now==0)showBoughtTickets(num);
 
-
+        //change state now
+        now=1;
+        var returnticketsList=jsonStr[now];
         for (var i = 0; i < returnticketsList.length; i++) {
             if(new Date(returnticketsList[i].deTimeString).getTime()>outTime)
               {ticketsList.push(returnticketsList[i])}
@@ -445,7 +462,7 @@
         console.log(returnticketsList.length+" rl1 " + ticketsList.length+ " ticketList")
 
         console.log("have tickets")
-        showBoughtTickets(num);
+        
         removeDiv();
 
         for (var i = 0; i < ticketsList.length; i++) {
@@ -470,7 +487,7 @@
             }
           }
           forward_List += '#';
-          //alert(forward_List);
+
 
 
           select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Concirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onClick="confirmation2('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
@@ -478,10 +495,10 @@
 
 
 
-          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-8 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
+          root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
           '<p>' + currentTickets.ticketList[0].departure + ' ' + currentTickets.deTimeString.split(" ")[1] +  ' - <br>' + currentTickets.ticketList[currentTickets.ticketList.length-1].arrival + ' ' + currentTickets.arTimeString.split(" ")[1] + '</p>'
           + '</div><div class="col-sm-4"><p>' + currentTickets.totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (currentTickets.ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + currentTickets.totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onClick="toggleDetails(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + "detail" + i + "_content" + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
-          + '</div></div>' + '<div class="row "><div class="col-sm-8" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
+          + '</div></div>' + '<div class="row "><div class="col-sm-7" style="border-bottom:2px ridge #999900"><p style="padding:8px"></p></div></div>'
         }
 
         return true;
@@ -498,16 +515,20 @@
        function sortprice (a,b){
         return a.totalPrice - b.totalPrice;
       }
+       console.log("now"+now);
      jsonStr[now].sort(sortprice);
-     createDiv();
+     if(now==0)createDiv();
+      else createDiv2();
      }
 
      function sortbyflighttime1(){
        function sortflighttime(a,b){
          return a.totalFlightMinute - b.totalFlightMinute;
        }
+       console.log("now"+now);
      jsonStr[now].sort(sortflighttime);
-     createDiv();
+     if(now==0)createDiv();
+      else createDiv2();
      }
 
      function sortbydeparturetime1(){
@@ -522,8 +543,10 @@
            return a.totalPrice - b.totalPrice;
          }
        }
+       console.log("now"+now);
     jsonStr[now].sort(sortdeparturetime);
-    createDiv();
+    if(now==0)createDiv();
+      else createDiv2();
      }
 
            function sortbyarrivaltime1(){
@@ -538,23 +561,29 @@
                  return a.totalPrice - b.totalPrice;
                }
              }
+             console.log("now"+now);
           jsonStr[now].sort(sortarrivaltime);
-          createDiv();
+          if(now==0)createDiv();
+      else createDiv2();
            }
            function sortbyprice2(){
          function sortprice (a,b){
           return b.totalPrice - a.totalPrice;
         }
+       console.log("now"+now);
        jsonStr[now].sort(sortprice);
-       createDiv();
+       if(now==0)createDiv();
+      else createDiv2();
        }
 
        function sortbyflighttime2(){
          function sortflighttime(a,b){
            return b.totalFlightMinute - a.totalFlightMinute;
          }
+       console.log("now"+now);
        jsonStr[now].sort(sortflighttime);
-       createDiv();
+       if(now==0)createDiv();
+      else createDiv2();
        }
 
        function sortbydeparturetime2(){
@@ -569,8 +598,10 @@
              return a.totalPrice - b.totalPrice;
            }
          }
+       console.log("now"+now);
       jsonStr[now].sort(sortdeparturetime);
-      createDiv();
+      if(now==0)createDiv();
+      else createDiv2();;
        }
 
        function sortbyarrivaltime2(){
@@ -585,9 +616,17 @@
              return a.totalPrice - b.totalPrice;
            }
          }
+       console.log("now"+now);
       jsonStr[now].sort(sortarrivaltime);
-      createDiv();
+      if(now==0)createDiv();
+      else createDiv2();
        }
+</script>
+<script type="text/javascript">
+  toastr.options.positionClass = 'toast-top-center';
+  toastr.options = {
+        closeButton: true,
+  }
 </script>
   </body>
 </html>
