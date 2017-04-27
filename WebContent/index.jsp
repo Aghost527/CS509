@@ -94,7 +94,7 @@
                     Coach
                   </label>
                   <label class="color-1">
-                    <input type="radio" name="customer_cabin" id="First-Class" value="First-Class">
+                    <input type="radio" name="customer_cabin" id="First-Class" value="FirstClass">
                     First-Class
                   </label>
                 </div>
@@ -179,7 +179,7 @@
                   '&customer_cabin='+document.getElementsByName("customer_cabin")[0].value+
                   '&customer_timetype='+$('input:radio[name="customer_timetype"]:checked').val()+
                   '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val()+
-                  "&seatTypes=&flightNums=";
+                  '&seatTypes=&flightNums=';
              }
           });
       });

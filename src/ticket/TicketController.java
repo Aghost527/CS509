@@ -15,7 +15,7 @@ public class TicketController {
 				}
 			}
 		}
-		else if(seatType.equals("First-Class")){
+		else if(seatType.equals("FirstClass")){
 		for(Flight f:flist){
 			if(f.getSeating().getFirstClassRemaining()==0){
 					return false;
@@ -50,7 +50,7 @@ public class TicketController {
 				if((types&1)==1){
 					if(f.getSeating().getFirstClassRemaining()<1)break;
 					System.out.println(f.getSeating().getFirstClassRemaining()+"first; "+f.getDeparture()+" 2 "+f.getArrival()+" num: "+f.getNumber() );
-					seatType = "First-Class";
+					seatType = "FirstClass";
 					String tprice=f.getSeating().getFirstClassPrice().replace(",", "").replace("$", "");
 					price+=Double.valueOf(tprice.replace(",","").replace("$",""));
 					tlist.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), seatType, tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));

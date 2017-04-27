@@ -87,7 +87,7 @@ public class Tickets  {
 			}
 			
 		}
-		else if(seatType.equals("First-Class")){
+		else if(seatType.equals("FirstClass")){
 			for(Flight f:flist){
 				String tprice=f.getSeating().getFirstClassPrice().replace(",", "");
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
