@@ -52,9 +52,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#" onClick="confirmation1()" id="sortbyprice" name="sortbyprice">By Price</a></li>
-            <li><a href="#" id="sortbystops" name="sortbystops">By Stops</a></li>
-            <li><a href="#" id="sortbycompanies" name="sortbycompanies">By Companies</a></li>
+            <li><a href=" " onClick="sortbyprice()" id="sortbyprice" name="sortbyprice">By Price</a ></li>
+            <li><a href="#" onClick="sortbyflighttime()" id="sortbyflighttime" name="sortbyflighttime">By Duration</a ></li>
+            <li><a href="#" onClick="sortbydeparturetime()" id="sortbydeparturetime" name="sortbydeparturetime">By Departure Time</a ></li>
+            <li><a href="#" onClick="sortbyarrivaltime()" id="sortbyarrivaltime" name="sortbyarrivaltime">By Arrival Time</a ></li>
             <li></li>
           </ul>
         </div>
@@ -125,8 +126,8 @@
     var seatTypeList="";
     var flightNumberList="";
     //tmp flights
-     var ticketsList=[]
-
+    var ticketsList=[]
+    var now=0;
 
     $(document).ready(function(){
 
@@ -192,8 +193,8 @@
     //for one way confirmation
     function confirmation1(i){
         console.log(i)
-        flightNumberList=jsonStr[0][i].flightNumbers;
-        seatTypeList=jsonStr[0][i].seatTypes;
+        flightNumberList=jsonStr[now][i].flightNumbers;
+        seatTypeList=jsonStr[now][i].seatTypes;
         console.log(flightNumberList)
         console.log(seatTypeList)
         
@@ -201,11 +202,14 @@
         {   
             $('#successmodal' + i ).modal('hide')
             $(".modal-backdrop").remove();
+            now=1;
             if(!createDiv2(i)){
               alert("There is no tickets to return if you buy this one")
-            };   
+            };  
+
         }
         else{
+          now=0;
           if(buyTickets());
         }
     }
@@ -287,7 +291,7 @@
     //for return flights
    function createDiv2(num) {
         
-        
+        now=1;
         var root = document.getElementById('root');
 
 
@@ -351,6 +355,59 @@
     }
 
 
+
+
+
+
+
+
+      function sortbyprice(){    
+       function sortprice (a,b){
+        return a.totalPrice - b.totalPrice; 
+      }  
+     jsonStr[0].sort(sortprice);
+     createDiv();
+     }
+        
+     function sortbyflighttime(){
+       function sortflighttime(a,b){
+         return a.totalFlightMinute - b.totalFlightMinute;
+       }
+     jsonStr[0].sort(sortflighttime);
+     createDiv();
+     }
+     
+     function sortbydeparturetime(){
+       function sortdeparturetime(a,b){
+         if(a.deTimeString > b.deTimeString){
+           return 1;
+         }
+         else if(a.deTimeString < b.deTimeString){
+           return -1;
+         }
+         else{
+           return a.totalPrice - b.totalPrice;
+         }
+       }
+    jsonStr[0].sort(sortdeparturetime);
+    createDiv();
+     }
+        
+     function sortbyarrivaltime(){
+       function sortarrivaltime(a,b){
+         if(a.arTimeString > b.arTimeString){
+           return 1;
+         }
+         else if(a.arTimeString < b.arTimeString){
+           return -1;
+         }
+         else{
+           return a.totalPrice - b.totalPrice;
+         }
+       }
+    jsonStr[0].sort(sortarrivaltime);
+    createDiv();
+     }
 </script>
   </body>
 </html>

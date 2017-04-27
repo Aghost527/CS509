@@ -176,7 +176,7 @@
                   '&customer_returndate='+document.getElementsByName("customer_returndate")[0].value+
                   // '&customer_search='+document.getElementsByName("customer_search")[0].value+
                   '&customer_triptype='+$('input:radio[name="customer_triptype"]:checked').val()+
-                  '&customer_cabin='+document.getElementsByName("customer_cabin")[0].value+
+                  '&customer_cabin='+$("input[name='customer_cabin']:checked").val()+
                   '&customer_timetype='+$('input:radio[name="customer_timetype"]:checked').val()+
                   '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val()+
                   '&seatTypes=&flightNums=';
