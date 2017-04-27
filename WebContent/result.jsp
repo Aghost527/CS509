@@ -191,8 +191,9 @@
 
     //for one way confirmation
     function confirmation1(i){
-        flightNumberList=jsonStr[0][i].flightNumbers
-        seatTypeList=jsonStr[0][i].seatTypes
+        console.log(i)
+        flightNumberList=jsonStr[0][i].flightNumbers;
+        seatTypeList=jsonStr[0][i].seatTypes;
         console.log(flightNumberList)
         console.log(seatTypeList)
         

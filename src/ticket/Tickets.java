@@ -92,6 +92,8 @@ public class Tickets  {
 				String tprice=f.getSeating().getFirstClassPrice().replace(",", "");
 				price+=Double.valueOf(tprice.substring(1, tprice.length()));
 				t.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), "First-Class", tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));				
+				this.seatTypes+=seatType+",";
+				this.flightNumbers+=f.getNumber()+",";
 			}
 		}
 		else{
