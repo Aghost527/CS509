@@ -142,15 +142,15 @@
 
       //no outbound
       else if(result==1){
-          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in the outbound trip" );
+          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the outbound trip" );
       }
       //no return
       else if(result==2){
-          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in the return trip" );
+          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in the return trip" );
       }
       //no outbound and return
       else if(result==3){
-          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in both the outbound trip and return trip" );
+          alert("There are no seats of <%=request.getParameter("customer_cabin")%>  in both the outbound trip and return trip" );
       }
     
 
