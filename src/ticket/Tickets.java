@@ -56,6 +56,8 @@ public class Tickets  {
 //		this.totalPrice = totalPrice;
 //		this.totalFlightTime = totalFlightTime;
 		for(Ticket t:ticketList){
+			System.out.println(t.getPrice());
+			this.totalPrice+=Double.parseDouble(t.getPrice().replace(",","").replace("$",""));
 			this.flightNumbers+=t.getNumber()+",";
 			this.seatTypes+=t.getSeatType()+",";
 		}

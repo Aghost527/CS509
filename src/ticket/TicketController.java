@@ -34,7 +34,7 @@ public class TicketController {
 
 	}
 	
-	public List<Tickets> noTicket(Flights flist) {
+	public static List<Tickets> noTicket(Flights flist) {
 		Double price=0.0;
 		String seatType;
 		List<Tickets> tslist=new ArrayList<Tickets>();
@@ -51,7 +51,7 @@ public class TicketController {
 					if(f.getSeating().getFirstClassRemaining()<1)break;
 					seatType = "First-Class";
 					String tprice=f.getSeating().getFirstClassPrice().replace(",", "");
-					price+=Double.valueOf(tprice.substring(1, tprice.length()));
+					price+=Double.valueOf(tprice.replace(",","").replace("$",""));
 					tlist.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), seatType, tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 	
 				}
@@ -59,7 +59,7 @@ public class TicketController {
 					if(f.getSeating().getCoachRemaining()<1)break;
 					seatType = "Coach";
 					String tprice=f.getSeating().getCoachPrice().replace(",", "");
-					price+=Double.valueOf(tprice.substring(1, tprice.length()));
+					price+=Double.valueOf(tprice.replace(",","").replace("$",""));
 					tlist.add(new Ticket(f.getAirplane(), f.getNumber(), f.getArrival(), f.getDeparture(), seatType, tprice, f.getFlightTime(), f.getDeTimeString(), f.getArTimeString()));
 
 				}
