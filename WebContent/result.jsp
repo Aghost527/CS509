@@ -141,11 +141,14 @@
     // check buy Tickets
     var check=<%=driverManager.buyTicket(request.getParameter("seatTypes"),request.getParameter("flightNums"))
     %>
+    document.getElementById("resultbuffer").value=0;
     if(check==0){
+        document.getElementById("resultbuffer").value=7;
         alert("The filght you Select has been sold out")
     }
     else if(check==1){
         alert("Reservation success")
+        window.location="index.jsp";
     }
     // data from back end
     var jsonStr=    	<%
@@ -488,7 +491,7 @@
        function sortprice (a,b){
         return a.totalPrice - b.totalPrice;
       }
-     jsonStr[0].sort(sortprice);
+     jsonStr[now].sort(sortprice);
      createDiv();
      }
 
@@ -496,7 +499,7 @@
        function sortflighttime(a,b){
          return a.totalFlightMinute - b.totalFlightMinute;
        }
-     jsonStr[0].sort(sortflighttime);
+     jsonStr[now].sort(sortflighttime);
      createDiv();
      }
 
@@ -512,7 +515,7 @@
            return a.totalPrice - b.totalPrice;
          }
        }
-    jsonStr[0].sort(sortdeparturetime);
+    jsonStr[now].sort(sortdeparturetime);
     createDiv();
      }
 
@@ -528,14 +531,14 @@
                  return a.totalPrice - b.totalPrice;
                }
              }
-          jsonStr[0].sort(sortarrivaltime);
+          jsonStr[now].sort(sortarrivaltime);
           createDiv();
            }
            function sortbyprice2(){
          function sortprice (a,b){
           return b.totalPrice - a.totalPrice;
         }
-       jsonStr[0].sort(sortprice);
+       jsonStr[now].sort(sortprice);
        createDiv();
        }
 
@@ -543,7 +546,7 @@
          function sortflighttime(a,b){
            return b.totalFlightMinute - a.totalFlightMinute;
          }
-       jsonStr[0].sort(sortflighttime);
+       jsonStr[now].sort(sortflighttime);
        createDiv();
        }
 
@@ -559,7 +562,7 @@
              return a.totalPrice - b.totalPrice;
            }
          }
-      jsonStr[0].sort(sortdeparturetime);
+      jsonStr[now].sort(sortdeparturetime);
       createDiv();
        }
 
@@ -575,7 +578,7 @@
              return a.totalPrice - b.totalPrice;
            }
          }
-      jsonStr[0].sort(sortarrivaltime);
+      jsonStr[now].sort(sortarrivaltime);
       createDiv();
        }
 </script>

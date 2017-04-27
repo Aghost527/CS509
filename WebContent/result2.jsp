@@ -176,6 +176,7 @@
             result+=1+i;
         }
       }
+      console.log(result)
       return result;
      }
 
