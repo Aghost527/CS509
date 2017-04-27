@@ -211,9 +211,16 @@
     function checkResult(){
       var Request = new Object();
         Request = GetRequest();
+        var flag=0;
+        for(i=0;i<jsonStr.length;i++){
+        if(jsonStr[i].length==0){
+            flag+=1+i;
+        }
+      }
+        if(flag!=0){
         if(Request["customer_cabin"]=="Alternative"&&Request["customer_returncabin"]=="Alternative") return 6;
         if(Request["customer_cabin"]=="Alternative") return 4;
-       if(Request["customer_returncabin"]=="Alternative") return 5;
+       if(Request["customer_returncabin"]=="Alternative") return 5;}
       var i=0;
       var result=0;
       for(i=0;i<jsonStr.length;i++){
