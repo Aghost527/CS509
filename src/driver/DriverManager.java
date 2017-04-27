@@ -348,7 +348,7 @@ public class DriverManager {
 
 	}
 
-	public JSONArray search(String tripType, String seatType, String departure, String date, String arrival,
+	public JSONArray search(String tripType, String seatType1, String seatType2, String departure, String date, String arrival,
 			String timeType, String returndate,String returntimeType) {
 		List<Flights> flightlist = new ArrayList<Flights>();
 		List<Tickets> outboundlist = new ArrayList<Tickets>();
@@ -366,8 +366,10 @@ public class DriverManager {
 				? "2017_05_11" : returndate;
 		departure = departure.equals("") | departure.equals(null) | departure.equals("null") | departure == null ? "BOS"
 				: departure;
-		seatType = seatType.equals("") | seatType.equals(null) | seatType.equals("null") | seatType == null ? "Alternative"
-				: seatType;
+		seatType1 = seatType1.equals("") | seatType1.equals(null) | seatType1.equals("null") | seatType1 == null ? "Coach"
+				: seatType1;
+		seatType2 = seatType2.equals("") | seatType2.equals(null) | seatType2.equals("null") | seatType2 == null ? "Coach"
+				: seatType2;
 		
 		//create airplane map
 		Map<String, Airplane> airplanes = new ServerInterface().getAirplanes("TeamE");
@@ -380,10 +382,10 @@ public class DriverManager {
 		flightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,departure, date, arrival, isByDeparture));
 		
 		//or generate one-way tickets
-		if(!seatType.equals("Alternative")){
+		if(!seatType1.equals("Alternative")){
 			for (Flights f : flightlist) {
-				if (TicketController.validateFlights(f, seatType)) {
-					outboundlist.add(new Tickets(f, seatType));
+				if (TicketController.validateFlights(f, seatType1)) {
+					outboundlist.add(new Tickets(f, seatType1));
 				}
 			}
 			System.out.println("outboundlist len:"+outboundlist.size());
@@ -410,12 +412,12 @@ public class DriverManager {
 			returnflightlist.addAll(driverManager.searchFlightsWithTwoStop(airplanes,arrival, returndate, departure, isByDeparture2));
 			
 		//return should be later than outbound
-		if(!seatType.equals("Alternative")){
+		if(!seatType2.equals("Alternative")){
 			for (Flights f2 : returnflightlist) {
-				if (!TicketController.validateFlights(f2, seatType)){
+				if (!TicketController.validateFlights(f2, seatType2)){
 					continue;
 				}
-				returnlist.add(new Tickets(f2, seatType));
+				returnlist.add(new Tickets(f2, seatType2));
 			}
 		}
 		else{

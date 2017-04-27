@@ -131,8 +131,29 @@
     }
     // data from back end
     var jsonStr=    	<%
-     out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
+     out.println(driverManager.search(request.getParameter("customer_triptype"), request.getParameter("customer_cabin"),request.getParameter("customer_returncabin"), request.getParameter("customer_from"),  request.getParameter("customer_date").replace('-', '_'), request.getParameter("customer_to"), request.getParameter("customer_timetype"),request.getParameter("customer_returndate").replace('-', '_'),request.getParameter("customer_returntimetype")));
     %>
+
+    var result=checkResult();
+     //good
+      if(result==0){
+
+      }
+
+      //no outbound
+      else if(result==1){
+          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in the outbound trip" );
+      }
+      //no return
+      else if(result==2){
+          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in the return trip" );
+      }
+      //no outbound and return
+      else if(result==3){
+          alert("There are no seats of " +<%=request.getParameter("customer_cabin")%> + " in both the outbound trip and return trip" );
+      }
+    
+
     // data to back end;
     var seatTypeList="";
     var flightNumberList="";
@@ -146,10 +167,17 @@
       
     });
 
-    // check whether the result is empty, if the seatType is  , it means the result contains all possible seat types
+    // check whether the result is empty, if the seatType is  , it means the result should contain all possible seat types
     function checkResult(){
-
-    }
+      var i=0;
+      var result=0;
+      for(i=0;i<jsonStr.length;i++){
+        if(jsonStr[i].length==0){
+            result+=1+i;
+        }
+      }
+      return result;
+     }
 
     function toggleDetails(obj) {
       //get id number
@@ -170,6 +198,25 @@
       
     }
 
+    function createAlternativeURL(seattype1,seattype2){
+        var Request = new Object();
+        Request = GetRequest(); 
+        var result = 'result.jsp?customer_from='+Request["customer_from"]+
+                  '&customer_to='+Request["customer_to"]+
+                  '&customer_date='+Request["customer_date"]+
+                  '&customer_returndate='+Request["customer_returndate"]+
+                  // '&customer_search='+document.getElementsByName("customer_search")[0].value+
+                  '&customer_triptype='+Request["customer_triptype"]+
+                  '&customer_cabin='+seattype1+
+                  '&customer_returncabin='+seattype2+
+                  '&customer_timetype='+Request["customer_timetype"]+
+                  '&customer_returntimetype='+Request["customer_returntimetype"]+
+                  '&seatTypes='+seatTypeList+
+                  '&flightNums='+flightNumberList+'#';
+
+        return result;
+    }
+
     function createBuyURL(){
         var Request = new Object();
         Request = GetRequest(); 
@@ -180,6 +227,7 @@
                   // '&customer_search='+document.getElementsByName("customer_search")[0].value+
                   '&customer_triptype='+Request["customer_triptype"]+
                   '&customer_cabin='+Request["customer_cabin"]+
+                  '&customer_returncabin='+Request["customer_returncabin"]+
                   '&customer_timetype='+Request["customer_timetype"]+
                   '&customer_returntimetype='+Request["customer_returntimetype"]+
                   '&seatTypes='+seatTypeList+

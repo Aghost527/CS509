@@ -184,17 +184,16 @@
               toastr.warning("Please enter valid airport name");
             }
             else{
-              var seatStr=$('input:radio[name="customer_cabin"]:checked').val();
-              // if($('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"){
-              //     seatStr+="-"+$('input:radio[name="customer_cabin"]:checked').val();
-              // }
+              
+              
                 window.location='result.jsp?customer_from='+$("input[name='customer_from']").val().toUpperCase()+
                   '&customer_to='+$("input[name='customer_to']").val().toUpperCase()+
                   '&customer_date='+document.getElementsByName("customer_date")[0].value+
                   '&customer_returndate='+document.getElementsByName("customer_returndate")[0].value+
                   // '&customer_search='+document.getElementsByName("customer_search")[0].value+
                   '&customer_triptype='+$('input:radio[name="customer_triptype"]:checked').val()+
-                  '&customer_cabin='+seatStr+
+                  '&customer_cabin='+$('input:radio[name="customer_cabin"]:checked').val()+
+                  '&customer_returncabin='+$('input:radio[name="customer_cabin"]:checked').val()+
                   '&customer_timetype='+$('input:radio[name="customer_timetype"]:checked').val()+
                   '&customer_returntimetype='+$('input:radio[name="customer_returntimetype"]:checked').val()+
                   "&seatTypes=&flightNums=";
