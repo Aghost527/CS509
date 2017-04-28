@@ -111,7 +111,7 @@ public class DriverManager {
 			}
 
 			for (Flight f2 : flights2) {
-				// System.out.println(f2.getDeparture());
+				// set time window to select time
 				if ((!isByDeparture) && (f2.getArrivalTime().before(d0) || f2.getArrivalTime().after(d1))) {
 					continue;
 				}

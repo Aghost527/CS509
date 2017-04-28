@@ -7,6 +7,11 @@ import flight.*;
 
 public class TicketController {
 	
+	/**
+	 * @param flist
+	 * @param seatType
+	 * @return
+	 */
 	public static boolean validateFlights(Flights flist,String seatType){
 		if(seatType.equals("Coach")){
 		for(Flight f:flist){
@@ -34,6 +39,10 @@ public class TicketController {
 
 	}
 	
+	/**
+	 * @param flist
+	 * @return
+	 */
 	public static List<Tickets> noTicket(Flights flist) {
 		Double price=0.0;
 		String seatType;

@@ -27,7 +27,9 @@ public class Saps {
 	
 	
 
-	
+	/**
+	 * This map connects the airports to the time zone
+	 */
 	public final static Map<String, String> timeZoneMap = new HashMap<String, String>() {/**
 		 * 
 		 */
@@ -78,7 +80,7 @@ public class Saps {
 		put("SLC","-7:00");
 		put("SAT","-6:00");
 		put("SAN","-7:00");
-		put("SFO","-8:00");
+		put("SFO","-7:00");
 		put("SJC","-8:00");
 		put("SNA","-7:00");
 		put("SEA","-8:00");

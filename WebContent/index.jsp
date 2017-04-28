@@ -152,30 +152,31 @@
       //data validation
       $(function() {
           $("#customer_search").click(function() {
-            //alert(document.getElementsByName("customer_date")[0].value)
-      //      alert($("input[name='customer_date']").val()=="");
 
-            if(
-              //The return time should not be before the outbound time
-              $('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&(
+            //The return time should not be before the outbound time
+            if($('input:radio[name="customer_triptype"]:checked').val()=="Roundtrip"&&(
               $("input[name='customer_date']").val()  >
               $("input[name='customer_returndate']").val() )) {
                   //alert("The return time should not be before the outbound time");
                   toastr.warning("The return time should not be before the outbound time")
             }
+             //The outbound date cannot be empty
             else if ($("input[name='customer_date']").val()=="") {
               toastr.warning("Date cannot be empty")
             }
+
+            //The return date cannot be empty
             else if ($("input[name='customer_triptype']:checked").val()=="Roundtrip"&&$("input[name='customer_returndate']").val()=="") {
-              toastr.warning("Date cannot be empty!!!")
+              toastr.warning("Date cannot be empty")
             }
-            //Departure city and Arrival city cannot be the same
+            //Departure city or Arrival city cannot be empt
             else if(document.getElementsByName("customer_from")[0].value==""||
               document.getElementsByName("customer_to")[0].value==""){
                   //alert("Departure city or Arrival city cannot be empty");
                   toastr.warning("Departure city or Arrival city cannot be empty")
 
             }
+            //Departure city and Arrival city cannot be the same
             else if (document.getElementsByName("customer_from")[0].value==document.getElementsByName("customer_to")[0].value){
                 //  alert("Departure city and Arrival city cannot be the same");
                   toastr.warning("Departure city and Arrival city cannot be the same")
