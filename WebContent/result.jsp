@@ -75,7 +75,30 @@
                 <li></li>
           </ul>
           </li>
+          <li class="dropdown">
+              <a  class="dropdown-toggle" data-toggle="dropdown">
+                Departure Time filter by <span class="caret"></span>
+              </a >
+                <ul class="dropdown-menu">
+                <li> <input type="checkbox" id="morning" name="test" value="0" checked="checked" onchange="now==0?createDiv():createDiv2()"/>morning (am 0:00 - am 10:00)</li>
+                <li><input type="checkbox" id="noon" name="test" value="1" checked="checked" onchange="now==0?createDiv():createDiv2()"/>noon (am 10:00 - pm 5:59)</li>
+                <li><input type="checkbox" id="night" name="test" value="2" checked="checked" onchange="now==0?createDiv():createDiv2()"/>night (pm 6:00- pm 11:59) </li>
           </ul>
+          </li>
+           <li class="dropdown">
+              <a  class="dropdown-toggle" data-toggle="dropdown">
+                Arrival Time filter by <span class="caret"></span>
+              </a >
+                <ul class="dropdown-menu">
+                <li> <input type="checkbox" id="Amorning" name="test" value="0" checked="checked" onchange="now==0?createDiv():createDiv2()"/>morning (am 0:00 - am 10:00)</li>
+                <li><input type="checkbox" id="Anoon" name="test" value="1" checked="checked" onchange="now==0?createDiv():createDiv2()"/>noon (am 10:00 - pm 5:59)</li>
+                <li><input type="checkbox" id="Anight" name="test" value="2" checked="checked" onchange="now==0?createDiv():createDiv2()"/>night (pm 6:00- pm 11:59) </li>
+          </ul>
+          </li>
+          </ul>
+         
+          
+          
         </div>
       </div>
     </nav>
@@ -398,6 +421,35 @@
         ticketsList=jsonStr[0];
 
         for (var i = 0; i < ticketsList.length; i++) {
+          
+          if((!$('#morning').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()<10)) {
+              continue;
+              console.log("morning filter "+new Date(ticketsList[i].deTimeString).getHours());
+          }   
+          if((!$('#noon').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()>=10&&new Date(ticketsList[i].deTimeString).getHours()<18)) {
+              continue;
+              console.log("noon filter");
+          }  
+          if((!$('#night').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()>=18)) {
+              continue;
+              console.log("night filter");
+          }  
+
+          //ar filter
+          if((!$('#Amorning').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()<10)) {
+              continue;
+              console.log("morning filter "+new Date(ticketsList[i].arTimeString).getHours());
+          }   
+          if((!$('#Anoon').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()>=10&&new Date(ticketsList[i].arTimeString).getHours()<18)) {
+              continue;
+              console.log("noon filter");
+          }  
+          if((!$('#Anight').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()>=18)) {
+              continue;
+              console.log("night filter");
+          }  
+
+
           var txt_id = "detail" + i + "_tag";
           var txt_content = "detail" + i + "_content";
           var forward_List = "success.jsp?";
@@ -466,6 +518,35 @@
         removeDiv();
 
         for (var i = 0; i < ticketsList.length; i++) {
+
+            if((!$('#morning').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()<10)) {
+              continue;
+              console.log("morning filter "+new Date(ticketsList[i].deTimeString).getHours());
+          }   
+          if((!$('#noon').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()>=10&&new Date(ticketsList[i].deTimeString).getHours()<18)) {
+              continue;
+              console.log("noon filter");
+          }  
+          if((!$('#night').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()>=18)) {
+              continue;
+              console.log("night filter");
+          }  
+
+          //ar filter
+          if((!$('#Amorning').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()<10)) {
+              continue;
+              console.log("morning filter "+new Date(ticketsList[i].arTimeString).getHours());
+          }   
+          if((!$('#Anoon').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()>=10&&new Date(ticketsList[i].arTimeString).getHours()<18)) {
+              continue;
+              console.log("noon filter");
+          }  
+          if((!$('#Anight').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()>=18)) {
+              continue;
+              console.log("night filter");
+          }  
+
+
           var txt_id = "detail" + i + "_tag";
           var txt_content = "detail" + i + "_content";
           var forward_List = "success.jsp?";
