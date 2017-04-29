@@ -4,14 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import flight.*;
-
+/**
+ * This class holds values from the flights. Class member attributes
+ * are the same as defined by the CS509 server API and store values after conversion from
+ * XML received from the server to Java primitives. Attributes are accessed via getter and 
+ * setter methods.
+ * 
+ * Ticketcontroller control the ticket with different seat types,
+ * and deal with the results which shows no tickets.
+ * @author TeamE
+ * 
+ * 
+ * 
+ * 
+ *
+ */
 public class TicketController {
 	
-	/**
-	 * @param flist
-	 * @param seatType
-	 * @return
-	 */
 	public static boolean validateFlights(Flights flist,String seatType){
 		if(seatType.equals("Coach")){
 		for(Flight f:flist){
@@ -39,10 +48,6 @@ public class TicketController {
 
 	}
 	
-	/**
-	 * @param flist
-	 * @return
-	 */
 	public static List<Tickets> noTicket(Flights flist) {
 		Double price=0.0;
 		String seatType;

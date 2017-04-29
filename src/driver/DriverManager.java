@@ -22,6 +22,11 @@ import ticket.Tickets;
 import ticket.Ticketsort;
 import utils.Saps;
 
+/**
+ * @author TeamE
+ *By maping the airplane, get the information of the airplanes and use API to transfer the time into
+ *to the local time zone
+ */
 public class DriverManager {
 
 	public List<Flights> searchFlightsWithoutStop(Map<String, Airplane> airplanes, String departure, String time, String arrival,
@@ -46,6 +51,9 @@ public class DriverManager {
 		// Flights flights = resSys.getFlighs("TeamE","BOS","2017_05_10",true);
 		Flights flights = new Flights();
 		flights = resSys.getFlightsFor2Days(airplanes,"TeamE", isByDeparture ? departure : arrival, time, isByDeparture);
+/**
+ * Get the searching condition and find which to list
+ */
 		if (isByDeparture) {
 
 			flights = flights.filterByArrival(arrival, flights);
@@ -56,7 +64,9 @@ public class DriverManager {
 		// System.out.println(flights.size() + "drivermanager");
 
 		for (Flight f : flights) {
-
+/**
+ * The validation for list, the departure time should be early than arrival time.
+ */
 			if (isByDeparture && (f.getDepartureTime().before(d0) || f.getDepartureTime().after(d1))) {
 				continue;
 			}
@@ -75,6 +85,15 @@ public class DriverManager {
 	/*
 	 * for the time being, it can only search flight within one day
 	 */
+/**
+ * Serach for one stop flight
+ * @param airplanes
+ * @param departure
+ * @param time
+ * @param arrival
+ * @param isByDeparture
+ * @return
+ */
 	public List<Flights> searchFlightsWithOneStop(Map<String,Airplane> airplanes,String departure, String time, String arrival,
 			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
@@ -111,13 +130,17 @@ public class DriverManager {
 			}
 
 			for (Flight f2 : flights2) {
-				// set time window to select time
+				// System.out.println(f2.getDeparture());
 				if ((!isByDeparture) && (f2.getArrivalTime().before(d0) || f2.getArrivalTime().after(d1))) {
 					continue;
 				}
 				if (f1.getArrival().equals(f2.getDeparture()) & f1.getArrivalTime().before(f2.getDepartureTime())) {
 					long diff = f2.getDepartureTime().getTime() - f1.getArrivalTime().getTime();
 					long minutes = diff / (1000 * 60);
+				/**
+				 * The lay over time should not be larger than 240 or smaller than 30
+				 */
+					
 					if (minutes > 240 | minutes < 30) {
 						continue;
 					}
@@ -134,7 +157,15 @@ public class DriverManager {
 		return res;
 
 	}
-
+/**
+ * Search for flights with two stops 
+ * @param airplanes
+ * @param departure
+ * @param time
+ * @param arrival
+ * @param isByDeparture
+ * @return
+ */
 	public List<Flights> searchFlightsWithTwoStop(Map<String,Airplane> airplanes,String departure, String time, String arrival,
 			boolean isByDeparture) {
 		ServerInterface resSys = new ServerInterface();
@@ -219,6 +250,12 @@ public class DriverManager {
 
 	}
 	
+	/**
+	 * Write the action for buying tickets, with flightnums and seattypes.
+	 * @param seatTypes
+	 * @param flightNums
+	 * @return
+	 */
 	public int buyTicket(String seatTypes, String flightNums) {
 		ServerInterface resSys = new ServerInterface();
 		String xmlFlights = flights2xml(flightNums, seatTypes);

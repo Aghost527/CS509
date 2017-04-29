@@ -31,6 +31,7 @@ public class Driver extends HttpServlet  {
 	}
 	
 	/**
+	 * use name Team E to get HTTP information
 	 * @param args
 	 */
 	public static void main(String[] args) {

@@ -1,4 +1,16 @@
 package flight;
+/**
+ * This class is a class for the seattype. Class member attributes
+ * are the same as defined by the CS509 server API and store values after conversion from
+ * XML received from the server to Java primitives. Attributes are accessed via getter and 
+ * setter methods.
+ * As 
+ * @author TeamE
+
+ * 
+ * 
+ *
+ */
 
 
 
@@ -40,7 +52,10 @@ public class Seating {
 	}
 
 
-
+/**
+ * Use get set method
+ * @return
+ */
 
 
 	public String getFirstClassPrice() {

@@ -5,7 +5,22 @@ import java.util.List;
 
 import flight.Flight;
 import flight.Flights;
-
+/**
+ * This class holds values from the flights. Class member attributes
+ * are the same as defined by the CS509 server API and store values after conversion from
+ * XML received from the server to Java primitives. Attributes are accessed via getter and 
+ * setter methods.
+ * 
+ * Tickets formed from flights, especially flights with stops.
+ * If the flight has 1 stop or 2 stops, the tickets means combine each stops together to be an 
+ * element of the ticket.
+ * @author TeamE
+ * 
+ * 
+ * 
+ * 
+ *
+ */
 public class Tickets  {
 	private List<Ticket> ticketList;
 	private Double totalPrice;

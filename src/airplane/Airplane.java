@@ -1,15 +1,18 @@
 package airplane;
-
+// Build class airplane
+/**
+ * @author Team E
+ *
+ */
 public class Airplane {
+/**
+ * Define parameters
+ */
 	String Manufacturer;
 	String Model;
 	int FirstClassSeats;
 	int CoachSeats;
-	
-	
-	
-	
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

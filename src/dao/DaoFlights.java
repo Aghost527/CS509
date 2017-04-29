@@ -35,6 +35,20 @@ public class DaoFlights {
 	public final static Map<String, String> monthMap = new HashMap<String, String>() {/**
 		 * 
 		 */
+		/**
+		 * Builds collection of Flights from flights described in XML
+		 * 
+		 * Parses an XML string to read each of the flights and adds each valid flight 
+		 * to the collection. The method uses Java DOM (Document Object Model) to convert
+		 * from XML to Java primitives.
+		 * 
+		 * @param xmlFlights XML string containing set of flights 
+		 * @return [possibly empty] collection of Flights in the xml string
+		 * @throws NullPointerException included to keep signature consistent with other addAll methods
+		 * 
+		 * @pre the xmlFlights string adheres to the format specified by the server API
+		 * @post the [possibly empty] set of Airports in the XML string are added to collection
+		 */
 		private static final long serialVersionUID = 1L;
 
 	{    
@@ -50,7 +64,16 @@ public class DaoFlights {
 		put("Oct","10");
 		put("Nov","11");
 		put("Dec","12");	}};  
-	
+/**
+ * Set all the months to the number	
+ 	 * Creates an Flight object from a DOM node
+	 * 
+	 * Processes a DOM Node that describes an Flight and creates an Flight object from the information
+	 * @param nodeFlight is a DOM Node describing an Flight
+	 * @return Flight object created from the DOM Node representation of the Flight
+	 * 
+	 * @pre nodeFlight is of format specified by CS509 server API
+ */
 	public static Flights addAll (Map<String,Airplane> airplanes,String xmlFlights) throws NullPointerException {
 		Flights flights = new Flights();
 		
@@ -175,7 +198,14 @@ public class DaoFlights {
 					  seats,FlightTime );
 		}
 		
-
+	/**
+	 * Builds a DOM tree form an XML string
+	 * 
+	 * Parses the XML file and returns a DOM tree that can be processed
+	 * 
+	 * @param xmlString XML String containing set of objects
+	 * @return DOM tree from parsed XML or null if exception is caught
+	 */
 	
 	
 	static private Document buildDomDoc (String xmlString) {
@@ -203,7 +233,12 @@ public class DaoFlights {
 			return null;
 		}
 	}
-	
+	/**
+	 * Retrieve character data from an element if it exists
+	 * 
+	 * @param e is the DOM Element to retrieve character data from
+	 * @return the character data as String [possibly empty String]
+	 */	
 	private static String getCharacterDataFromElement (Element e) {
 		Node child = e.getFirstChild();
 	    if (child instanceof CharacterData) {

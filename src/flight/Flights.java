@@ -4,6 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * This class holds values pertaining to conbine the flight and make them into a list. Class member attributes
+ * are the same as defined by the CS509 server API and store values after conversion from
+ * XML received from the server to Java primitives. Attributes are accessed via getter and 
+ * setter methods.
+ * 
+ * @author Team E
+ * 
+ * 
+ * 
+ * 
+ *
+ */
 
 public class Flights extends ArrayList<Flight> {
 	private static final long serialVersionUID = 1L;
@@ -12,7 +25,12 @@ public class Flights extends ArrayList<Flight> {
 	public Flights(){
 		
 	}
-	
+	/**
+	 * writing sort method
+	 * use comparator in the java
+	 * and use sort to use this comparator
+	 * @param flight
+	 */
 	public void sortByDepartureAirport(Flights flight){
 		 Comparator<Flight> comparator = new Comparator<Flight>(){
 				 public int compare(Flight o1, Flight o2) {

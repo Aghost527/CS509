@@ -61,7 +61,16 @@ public class Airport {
 	 * @post member attributes are initialized with input parameter values
 	 * @throws IllegalArgumentException is any parameter is invalid
 	 */
+	/**
+	 * @param name
+	 * @param code
+	 * @param latitude
+	 * @param longitude
+	 */
 	public Airport (String name, String code, double latitude, double longitude) {
+/**
+ * Find if the name code latitude and longitude is available.
+ */
 		if (!isValidName(name))
 			throw new IllegalArgumentException(name);
 		if (!isValidCode(code)) 
@@ -92,6 +101,9 @@ public class Airport {
 	 */
 	public Airport (String name, String code, String latitude, String longitude) {
 		double tmpLatitude, tmpLongitude;
+		/**
+		 * Use latitude and longitude to find the airport.
+		 */
 		try {
 			tmpLatitude = Double.parseDouble(latitude);
 		} catch (NullPointerException | NumberFormatException ex) {

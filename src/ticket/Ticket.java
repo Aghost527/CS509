@@ -1,4 +1,18 @@
 package ticket;
+/**
+ * This class holds values from the flights. Class member attributes
+ * are the same as defined by the CS509 server API and store values after conversion from
+ * XML received from the server to Java primitives. Attributes are accessed via getter and 
+ * setter methods.
+ * 
+ * Use ticket to get each ticket, non stop has 1 ticket, 1 stop has 2 tickets, 2 stop has 3.
+ * @author TeamE
+ * 
+ * 
+ * 
+ * 
+ *
+ */
 
 import java.util.Date;
 
