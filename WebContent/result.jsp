@@ -195,9 +195,10 @@
     %>
 
     var result=0;
+    //check if the result is empty
     result=checkResult();
     document.getElementById("resultbuffer").value=result;
-     //good
+     //good to continue
       if(result==0){
 
       }
@@ -267,6 +268,7 @@
       return result;
      }
 
+     //show or hide the flight details
     function toggleDetails(obj) {
       //get id number
       var value = obj.id.replace(/[^0-9]/ig,"");
@@ -279,13 +281,14 @@
 
     }
 
-
+    //send request to buy tickets
     function buyTickets(i){
       var url = createBuyURL();
       window.location=url;
 
     }
 
+    //when there is no tickets available of certain type of seats, we need to search for alternative tickets
     function alternative(){
         console.log("into "+result);
         result=document.getElementById("resultbuffer").value;
@@ -310,6 +313,7 @@
         else if(result==4|result==5|result==6){
             window.location="index.jsp";
         }
+      //generate another search request to search tickets with alternative seats
         var result = 'result.jsp?customer_from='+Request["customer_from"]+
                   '&customer_to='+Request["customer_to"]+
                   '&customer_date='+Request["customer_date"]+
@@ -326,6 +330,7 @@
         window.location=result;
     }
 
+    //generate the request of buying tickets
     function createBuyURL(){
         var Request = new Object();
         Request = GetRequest();
@@ -345,8 +350,9 @@
         return result;
     }
 
+    //get parameters of url
     function GetRequest() {
-          var url = location.search; //获取url中"?"符后的字串
+          var url = location.search; 
           var theRequest = new Object();
           if (url.indexOf("?") != -1) {
           var str = url.substr(1);
@@ -358,7 +364,7 @@
           return theRequest;
       }
 
-    //for one way confirmation
+    //for one way trip confirmation
     function confirmation1(i){
         console.log(i)
         now=0;
@@ -367,11 +373,13 @@
         console.log(flightNumberList)
         console.log(seatTypeList)
 
+        //if the trip is round way, we need to select return trip
         if(<%out.print(request.getParameter("customer_triptype").equals("Roundtrip"));%>)
         {
             $('#successmodal' + i ).modal('hide')
             $(".modal-backdrop").remove();
             
+            //if there are no return trip, we suggest the user do not buy this ticket
             if(!createDiv2(i)){
               toastr.info("There are no tickets to return if you buy this one")
               alert("There are no tickets to return if you buy this one. So it is only for viewing.")
@@ -384,7 +392,7 @@
         }
     }
 
-    //for round way confirmation
+    //for round way trip confirmation
     function confirmation2(i){
         if(true){
 
@@ -395,6 +403,7 @@
         }
     }
 
+    //display the selected tickets
     function showBoughtTickets(num){
         document.getElementById('panelModal').style.display = 'inline';
         var bought_details="";
@@ -421,7 +430,7 @@
         ticketsList=jsonStr[0];
 
         for (var i = 0; i < ticketsList.length; i++) {
-          
+          //departure time filter
           if((!$('#morning').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()<10)) {
               continue;
               console.log("morning filter "+new Date(ticketsList[i].deTimeString).getHours());
@@ -435,7 +444,7 @@
               console.log("night filter");
           }  
 
-          //ar filter
+          //arriving time filter
           if((!$('#Amorning').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()<10)) {
               continue;
               console.log("morning filter "+new Date(ticketsList[i].arTimeString).getHours());
@@ -463,7 +472,7 @@
           for (var j = 0; j < currentTickets.ticketList.length; j++) {
 
 
-
+            //the detail information of a flight
             detail_txt += '<div class="col-sm-12"><div class="col-sm-3"><p>Flight Number ' + currentTickets.ticketList[j].number + "  "+ currentTickets.ticketList[j].seatType + '</p>' + '</div><div class="col-sm-3"><p>departs ' + currentTickets.ticketList[j].departure + ' ' + currentTickets.ticketList[j].deTimeString + '</p></div><div class="col-sm-3"><p>arrives ' + currentTickets.ticketList[j].arrival + ' ' +
             currentTickets.ticketList[j].arTimeString + '</p></div><div class="col-sm-3"><p>' + currentTickets.ticketList[j].flightTime + 'minutes' + '</p></div></div>';
 
@@ -474,11 +483,11 @@
           }
           forward_List += '#';
 
-
+          //the dialog box triggered by select button
           select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button>          <div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Confirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div>'+detail_txt+'</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary" onClick="confirmation1('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
 
 
-
+          //the content of flight to fill the div
           root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
           '<p>' + currentTickets.ticketList[0].departure + ' ' + currentTickets.deTimeString.split(" ")[1] +  ' - <br>' + currentTickets.ticketList[currentTickets.ticketList.length-1].arrival + ' ' + currentTickets.arTimeString.split(" ")[1] + '</p>'
           + '</div><div class="col-sm-4"><p>' + currentTickets.totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (currentTickets.ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + currentTickets.totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onClick="toggleDetails(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + "detail" + i + "_content" + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
@@ -505,6 +514,8 @@
         //change state now
         now=1;
         var returnticketsList=jsonStr[now];
+
+        //filter out the return trip earlier than outbound trip
         for (var i = 0; i < returnticketsList.length; i++) {
             if(new Date(returnticketsList[i].deTimeString).getTime()>outTime)
               {ticketsList.push(returnticketsList[i])}
@@ -518,8 +529,8 @@
         removeDiv();
 
         for (var i = 0; i < ticketsList.length; i++) {
-
-            if((!$('#morning').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()<10)) {
+          //departure time filter
+          if((!$('#morning').is(':checked'))&&(new Date(ticketsList[i].deTimeString).getHours()<10)) {
               continue;
               console.log("morning filter "+new Date(ticketsList[i].deTimeString).getHours());
           }   
@@ -532,7 +543,7 @@
               console.log("night filter");
           }  
 
-          //ar filter
+          //arriving time filter
           if((!$('#Amorning').is(':checked'))&&(new Date(ticketsList[i].arTimeString).getHours()<10)) {
               continue;
               console.log("morning filter "+new Date(ticketsList[i].arTimeString).getHours());
@@ -570,12 +581,12 @@
           forward_List += '#';
 
 
-
+          //the dialog box triggered by select button
           select_txt += '<button class="btn btn-success" type="button" data-toggle="modal" data-target="#successmodal' + i + '">Select</button><div class="modal fade" id="successmodal' + i + '" tabindex="-1" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">Ticket Confirmation</h4></div><div class="modal-body">Are you sure to buy this ticket?</div><div>'+detail_txt+'</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">No</button><button type="button" class="btn btn-primary"onClick="confirmation2('+ i +')"data-dismiss="modal">Yes</button></div></div></div></div>';
 
 
 
-
+          //the content of flight to fill the div
           root.innerHTML = root.innerHTML + '<div class="row flight-div1" ><div class="col-sm-7 row-content flight-div2"><div class="col-sm-9 padding-p"><div class="col-sm-12"><div class="col-sm-4">' +
           '<p>' + currentTickets.ticketList[0].departure + ' ' + currentTickets.deTimeString.split(" ")[1] +  ' - <br>' + currentTickets.ticketList[currentTickets.ticketList.length-1].arrival + ' ' + currentTickets.arTimeString.split(" ")[1] + '</p>'
           + '</div><div class="col-sm-4"><p>' + currentTickets.totalFlightTime + '</div><div class="col-sm-4">  <p>'  + (currentTickets.ticketList.length-1) +  '</p></div></div></div>' + '<div class="col-sm-3"><p style="font-size:30px"><span class="glyphicon glyphicon-usd" style="font-size: 25px"></span>' + currentTickets.totalPrice.toFixed(1) + '</p><p>' + select_txt + '</p><ul class="list-unstyled">  <li><a id="' + txt_id + '" href="#" onClick="toggleDetails(this)">Flight Details <span class="caret"></span></a></li>  </ul></div>' + '<div id="' + "detail" + i + "_content" + '" style="display:none" class="col-sm-12 flight-div3">' + detail_txt + '</div>'
@@ -592,6 +603,7 @@
 
 
 
+       //sort flights by price from low to high
       function sortbyprice1(){
        function sortprice (a,b){
         return a.totalPrice - b.totalPrice;
@@ -602,6 +614,7 @@
       else createDiv2();
      }
 
+       //sort flights by duration time from low to high
      function sortbyflighttime1(){
        function sortflighttime(a,b){
          return a.totalFlightMinute - b.totalFlightMinute;
@@ -612,6 +625,7 @@
       else createDiv2();
      }
 
+       //sort flights by departure time from low to high
      function sortbydeparturetime1(){
        function sortdeparturetime(a,b){
          if(a.deTimeString > b.deTimeString){
@@ -630,6 +644,7 @@
       else createDiv2();
      }
 
+       //sort flights by arrival time from low to high
            function sortbyarrivaltime1(){
              function sortarrivaltime(a,b){
                if(a.arTimeString > b.arTimeString){
@@ -647,6 +662,9 @@
           if(now==0)createDiv();
       else createDiv2();
            }
+
+
+       //sort flights by price from high to low
            function sortbyprice2(){
          function sortprice (a,b){
           return b.totalPrice - a.totalPrice;
@@ -657,6 +675,7 @@
       else createDiv2();
        }
 
+       //sort flights by duration time from high to low
        function sortbyflighttime2(){
          function sortflighttime(a,b){
            return b.totalFlightMinute - a.totalFlightMinute;
@@ -667,6 +686,7 @@
       else createDiv2();
        }
 
+       //sort flights by departure time from high to low
        function sortbydeparturetime2(){
          function sortdeparturetime(a,b){
            if(a.deTimeString > b.deTimeString){
@@ -685,6 +705,7 @@
       else createDiv2();;
        }
 
+       //sort flights by arrival time from high to low
        function sortbyarrivaltime2(){
          function sortarrivaltime(a,b){
            if(a.arTimeString > b.arTimeString){

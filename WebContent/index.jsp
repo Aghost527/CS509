@@ -51,9 +51,9 @@
           <h1 class="color-white">Look up your flights here</h1>
         </div>
         <div class="col-sm-12">
-          <!-- <form class="form-horizontal" role="form" action="result.jsp" method="get"> -->
+          
 
-            <div id="searching_board" class="form-group"><!--id中间不能出现空格。需要用下划线代替空格 -->
+            <div id="searching_board" class="form-group">
               <div id="adjust1" class="col-sm-2">
                 <input class="form-control" type="text" id="customer_from" name="customer_from" placeholder="From City or Airport" >
               </div>
@@ -132,6 +132,8 @@
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
     <script language="javascript">
       var Airports = new Array("ATL","ANC","AUS","BWI","BOS","CLT","MDW","ORD","CVG","CLE","CMH","DFW","DEN","DTW","FLL","RSW","BDL","HNL","IAH","HOU","IND","MCI","LAS","LAX","MEM","MIA","MSP","BNA","MSY","JFK","LGA","EWR","OAK","ONT","MCO","PHL","PHX","PIT","PDX","RDU","SMF","SLC","SAT","SAN","SFO","SJC","SNA","SEA","STL","TPA","IAD","DCA");
+      
+      //if one way, hide the information about roundtrip
       $(function() {
           $("#one-way").click(function() {
             document.getElementById("returntimetypediv").style.display="none"
@@ -141,6 +143,7 @@
           });
       });
 
+      //if round trip, show the information about roundtrip
       $(function() {
           $("#roundtrip").click(function() {
              $("#returntimetypediv").show();
@@ -172,7 +175,6 @@
             //Departure city or Arrival city cannot be empt
             else if(document.getElementsByName("customer_from")[0].value==""||
               document.getElementsByName("customer_to")[0].value==""){
-                  //alert("Departure city or Arrival city cannot be empty");
                   toastr.warning("Departure city or Arrival city cannot be empty")
 
             }
@@ -181,9 +183,13 @@
                 //  alert("Departure city and Arrival city cannot be the same");
                   toastr.warning("Departure city and Arrival city cannot be the same")
             }
+
+            //convert lowercase to uppercase
             else if (Airports.includes($("input[name='customer_from']").val().toUpperCase()) == false || Airports.includes($("input[name='customer_to']").val().toUpperCase()) == false) {
               toastr.warning("Please enter valid airport name");
             }
+
+            //all validation pass
             else{
               
               
